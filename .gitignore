@@ -1,0 +1,5 @@
+# Written on the server by the Ansible repository; never committed.
+.env
+*.generated.*
+# What the containers store: the database, the images, certificates.
+data/

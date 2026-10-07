@@ -1,0 +1,39 @@
+# The collecting side, the same on every server that is monitored: Alloy ships the containers' logs to Loki, the Beszel
+# agent answers the hub's questions about the machine. Both talk over the private network only.
+services:
+  alloy:
+    image: grafana/alloy:v1.20.1
+    container_name: alloy
+    restart: unless-stopped
+    command:
+      - run
+      - /etc/alloy/config.alloy
+      - --storage.path=/var/lib/alloy/data
+      - --disable-reporting
+    environment:
+      LOKI_URL: ${LOKI_URL:?where Loki listens, e.g. http://10.0.0.2:3100}
+      PRODUCT: ${PRODUCT:?the product this server belongs to}
+      HOST_NAME: ${HOST_NAME:?this server's name}
+    volumes:
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - alloy:/var/lib/alloy/data
+
+  # Started only with the profile `beszel`, once the hub's key is known (the hub shows it when the server is added).
+  beszel-agent:
+    image: henrygd/beszel-agent:0.21.0
+    container_name: beszel-agent
+    restart: unless-stopped
+    profiles: ["beszel"]
+    network_mode: host
+    environment:
+      # On the private address only: the hub connects here, nobody else can.
+      LISTEN: ${PRIVATE_IP:?this server's address on the private network}:45876
+      # The hub's public key, shown when the system is added in Beszel.
+      KEY: ${BESZEL_KEY:-}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/beszel-agent:/var/lib/beszel-agent
+
+volumes:
+  alloy:

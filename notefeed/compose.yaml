@@ -1,0 +1,67 @@
+# notefeed with its database and its image store. Nothing here is published to the internet: Caddy (../caddy) reaches
+# notefeed over the shared network `edge`, and the monitoring server scrapes /metrics over the private network.
+services:
+  notefeed:
+    image: ghcr.io/notefeed/notefeed:0.9.1
+    container_name: notefeed
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NOTEFEED_STORAGE: postgres
+      NOTEFEED_DATABASE_URL: postgres://notefeed:${POSTGRES_PASSWORD:?the database password}@db:5432/notefeed
+      NOTEFEED_IMAGES: s3
+      NOTEFEED_S3_ENDPOINT: http://s3:7070
+      NOTEFEED_S3_BUCKET: ${NOTEFEED_S3_BUCKET:-notefeed-images}
+      NOTEFEED_S3_REGION: us-east-1
+      # Behind Caddy, which says who the client is.
+      NOTEFEED_TRUST_PROXY: "1"
+    ports:
+      - "${PRIVATE_IP:?this server's address on the private network}:3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      s3:
+        condition: service_started
+    networks:
+      - internal
+      - edge
+
+  # Feeds, the text of notes and their metadata.
+  db:
+    image: postgres:17-alpine
+    container_name: notefeed-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: notefeed
+      POSTGRES_DB: notefeed
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notefeed -d notefeed"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks:
+      - internal
+
+  # The image bytes: Versity Gateway, an S3 server over a plain folder. A bucket is a folder in ./data/s3 and an object
+  # a file in it. Any S3-compatible store can take its place; only the endpoint and the keys change.
+  s3:
+    image: versity/versitygw:v1.8.0
+    container_name: notefeed-s3
+    restart: unless-stopped
+    command: posix /data
+    environment:
+      ROOT_ACCESS_KEY: ${NOTEFEED_S3_ACCESS_KEY:?the image store's access key}
+      ROOT_SECRET_KEY: ${NOTEFEED_S3_SECRET_KEY:?the image store's secret key}
+    volumes:
+      - ./data/s3:/data
+    networks:
+      - internal
+
+networks:
+  internal:
+    name: notefeed
+  edge:
+    external: true

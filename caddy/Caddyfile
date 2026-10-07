@@ -1,0 +1,21 @@
+{
+	email {$ACME_EMAIL}
+}
+
+{$SITE_HOST} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	# A note with its pictures is one request: the text and up to ten images of at most 10 MiB each.
+	request_body {
+		max_size 120MB
+	}
+
+	# notefeed takes the client's address from the last entry of X-Forwarded-For (NOTEFEED_TRUST_PROXY=1). Caddy writes
+	# that header itself and does not pass on one a client sent.
+	reverse_proxy notefeed:3000
+}
