@@ -12,6 +12,7 @@ services:
     env_file: .env
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./access-log.caddy:/etc/caddy/access-log.caddy:ro
       - ./data/caddy:/data
       - ./data/config:/config
     networks:

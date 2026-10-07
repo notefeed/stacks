@@ -1,0 +1,46 @@
+# What the access log keeps, and what it must never hold. Imported by the Caddyfile for the access log and for
+# Caddy's own log, whose error lines describe the request too.
+#
+# Kept: the time, the method, the kind of request, the status, the size and the duration, and the network a request
+# came from. Not kept: anything that says who it was or which feed it was for.
+format filter {
+	wrap json
+	fields {
+		# The address, shortened: the last part of an IPv4 address and all but the first 48 bits of an IPv6 one are
+		# zeroed before the line is written. The full address is never stored.
+		request>remote_ip ip_mask {
+			ipv4 24
+			ipv6 48
+		}
+		request>client_ip ip_mask {
+			ipv4 24
+			ipv6 48
+		}
+		request>remote_port delete
+
+		# Headers hold cookies, tokens and feed passwords; a redirect's Location holds a feed's name.
+		request>headers delete
+		request>tls delete
+		resp_headers delete
+
+		# The path holds the feed's name or its read id, which work like passwords, and note ids. They are replaced
+		# by placeholders, so a line says "a post to a feed", not to which. Names notefeed keeps for itself (/api,
+		# /r, /_next, …) and files at the top (/robots.txt) are marked with ~ first, so they are not taken for feeds;
+		# a feed's name can hold neither ~ nor a dot.
+		request>uri multi_regexp {
+			regexp "\?.*$" ""
+			regexp "^/(_next|api|r|n|login|logout|mcp|metrics|oauth|static|health|privacy|imprint|\.well-known)(/|$)" "/~${1}${2}"
+			regexp "^/([^~/]*\.[^/]*)$" "/~${1}"
+			regexp "^/[^~/][^/]*" "/<feed>"
+			regexp "^/<feed>/settings(/|$)" "/<feed>/~settings${1}"
+			regexp "^/<feed>/[^~/][^/]*" "/<feed>/<note>"
+			regexp "^/~r/[^/]+" "/~r/<read-id>"
+			regexp "^(/~r/<read-id>)/[^/]*\.([A-Za-z0-9]+)$" "${1}/<file>.${2}"
+			regexp "^(/~r/<read-id>)/[^/<][^/]*$" "${1}/<note>"
+			regexp "^/~n/[^/]+" "/~n/<note>"
+			regexp "^/~api/v1/feeds/[^/]+" "/~api/v1/feeds/<feed>"
+			regexp "(/notes)/[^/]+" "${1}/<note>"
+			regexp "~" ""
+		}
+	}
+}

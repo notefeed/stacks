@@ -1,9 +1,20 @@
 {
 	email {$ACME_EMAIL}
+
+	# Caddy's own log: its error lines describe the request, so they get the same treatment as the access log.
+	log {
+		import /etc/caddy/access-log.caddy
+	}
 }
 
 {$SITE_HOST} {
 	encode zstd gzip
+
+	# One line per request, without anything that says who it was or which feed it was for: see access-log.caddy.
+	log {
+		output stdout
+		import /etc/caddy/access-log.caddy
+	}
 
 	header {
 		Strict-Transport-Security "max-age=31536000"
