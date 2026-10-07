@@ -4,7 +4,7 @@ How [notefeed.me](https://notefeed.me) runs [notefeed](https://github.com/notefe
 
 | Folder | What runs | Reachable |
 |---|---|---|
-| `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store) | Only through Caddy; `/metrics` also on the private network |
+| `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store) | On the server's private address only: Caddy passes requests on, and the monitoring server scrapes `/metrics` |
 | `caddy/` | Caddy: certificates from Let's Encrypt and the front door | Public, ports 80 and 443 |
 | `collectors/` | Alloy (container logs to Loki) and the Beszel agent | Not from outside |
 
@@ -19,9 +19,8 @@ This repository is checked out on the server. A companion repository, which is p
 ## Trying it yourself
 
 ```sh
-docker network create edge
 cp notefeed/.env.example notefeed/.env   # fill in the secrets; PRIVATE_IP=127.0.0.1 on a single machine
-cp caddy/.env.example caddy/.env         # your host name and address
+cp caddy/.env.example caddy/.env         # your host name and address; UPSTREAM=127.0.0.1:3000 to match
 mkdir -p notefeed/data/s3/notefeed-images
 (cd notefeed && docker compose up -d)
 (cd caddy && docker compose up -d)

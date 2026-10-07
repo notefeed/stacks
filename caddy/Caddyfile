@@ -28,5 +28,5 @@
 
 	# notefeed takes the client's address from the last entry of X-Forwarded-For (NOTEFEED_TRUST_PROXY=1). Caddy writes
 	# that header itself and does not pass on one a client sent.
-	reverse_proxy notefeed:3000
+	reverse_proxy {$UPSTREAM}
 }

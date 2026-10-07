@@ -1,5 +1,5 @@
-# notefeed with its database and its image store. Nothing here is published to the internet: Caddy (../caddy) reaches
-# notefeed over the shared network `edge`, and the monitoring server scrapes /metrics over the private network.
+# notefeed with its database and its image store. Nothing here is published to the internet: notefeed listens on the
+# server's private address, where Caddy (../caddy) passes requests on and the monitoring server scrapes /metrics.
 services:
   notefeed:
     image: ghcr.io/notefeed/notefeed:0.9.1
@@ -24,7 +24,6 @@ services:
         condition: service_started
     networks:
       - internal
-      - edge
 
   # Feeds, the text of notes and their metadata.
   db:
@@ -63,5 +62,3 @@ services:
 networks:
   internal:
     name: notefeed
-  edge:
-    external: true
