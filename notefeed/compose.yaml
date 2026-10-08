@@ -15,6 +15,11 @@ services:
       NOTEFEED_S3_REGION: us-east-1
       # Behind Caddy, which says who the client is.
       NOTEFEED_TRUST_PROXY: "1"
+      # This instance's own imprint and privacy page (./legal); notefeed ships neither.
+      NOTEFEED_IMPRINT_FILE: /legal/imprint.md
+      NOTEFEED_PRIVACY_FILE: /legal/privacy.md
+    volumes:
+      - ./legal:/legal:ro
     ports:
       - "${PRIVATE_IP:?this server's address on the private network}:3000:3000"
     depends_on:
