@@ -4,7 +4,7 @@ How [notefeed.me](https://notefeed.me) runs [notefeed](https://github.com/notefe
 
 | Folder | What runs | Reachable |
 |---|---|---|
-| `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint and privacy page, `scripts/dump.sh` dumps the database | On the server's private address only: Caddy passes requests on, and the monitoring server scrapes `/metrics` |
+| `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint, privacy page and the notice on its start page, `scripts/dump.sh` dumps the database | On the server's private address only: Caddy passes requests on, and the monitoring server scrapes `/metrics` |
 | `caddy/` | Caddy: certificates from Let's Encrypt and the front door | Public, ports 80 and 443 |
 | `collectors/` | Alloy (container logs to Loki), the Beszel agent, and AutoKuma, which turns the `kuma.*` labels in these files into monitors in Uptime Kuma | Not from outside |
 

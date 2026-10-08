@@ -1,0 +1,1 @@
+**notefeed.me is still being built.** There is no guarantee that the service is available or that what you post is kept: it can be unreachable, and notes, images and whole feeds can be lost. Do not use it for anything you cannot afford to lose.

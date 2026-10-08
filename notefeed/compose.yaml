@@ -2,7 +2,7 @@
 # server's private address, where Caddy (../caddy) passes requests on and the monitoring server scrapes /metrics.
 services:
   notefeed:
-    image: ghcr.io/notefeed/notefeed:0.9.2
+    image: ghcr.io/notefeed/notefeed:0.9.3
     container_name: notefeed
     # Monitored by Uptime Kuma on the monitoring server (see ../collectors: AutoKuma reads these labels): notefeed itself,
     # over the private network, so an alert tells this apart from Caddy or DNS failing.
@@ -24,6 +24,8 @@ services:
       # This instance's own imprint and privacy page (./legal); notefeed ships neither.
       NOTEFEED_IMPRINT_FILE: /legal/imprint.md
       NOTEFEED_PRIVACY_FILE: /legal/privacy.md
+      # What the start page says above the introduction, as a warning banner.
+      NOTEFEED_NOTICE_FILE: /legal/notice.md
     volumes:
       - ./legal:/legal:ro
     ports:
