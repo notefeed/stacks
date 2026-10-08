@@ -7,6 +7,11 @@
 	}
 }
 
+# The name with www in front only forwards. It needs its own DNS record; delete this block if there is none.
+www.{$SITE_HOST} {
+	redir https://{$SITE_HOST}{uri} permanent
+}
+
 {$SITE_HOST} {
 	encode zstd gzip
 
