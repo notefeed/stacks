@@ -16,7 +16,14 @@ The instance runs on servers of Hetzner Online GmbH, Industriestr. 25, 91710 Gun
 
 **Why and legal basis:** to provide the feed you asked for (Art. 6 (1) (b) GDPR).
 
-**Retention:** until you delete the feed. Deleting a feed deletes everything in it.
+**Retention:** until you delete the feed. Deleting a feed deletes everything in it at once. Backups keep it a little longer, see below.
+
+**Backups:** so that a failure does not lose your notes, copies are made of what is stored:
+
+- every hour a copy of the database (feeds, notes and their metadata, without the images), kept on the same server for 1 day;
+- every day a backup of the whole server, images included, made and kept by Hetzner for 7 days.
+
+A backup is not changed after it is made, so a feed or note you delete is still in the backups made before. It is gone from the last of them after 8 days at most: 7 days of server backups, each of which holds up to 1 day of database copies. Backups are stored in Germany, are read only to bring the service back after a failure or a mistake, and are not searched or used for anything else. The legal basis is my legitimate interest, and my duty, to keep the service and your data available (Art. 6 (1) (f), Art. 32 GDPR).
 
 **Careful with images:** metadata such as the GPS position is left in uploaded images. Anyone who can read the feed can see it. Remove it before uploading if you do not want to share it.
 
