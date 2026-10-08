@@ -7,6 +7,19 @@ services:
   caddy:
     image: caddy:2.11.7
     container_name: caddy
+    # Monitored by Uptime Kuma (see ../collectors): the site as a visitor reaches it, and the name with www in front.
+    labels:
+      kuma.site.http.name: ${SITE_HOST}
+      kuma.site.http.url: https://${SITE_HOST}/
+      kuma.site.http.parent_name: host-group
+      kuma.www.http.name: www.${SITE_HOST}
+      kuma.www.http.url: https://www.${SITE_HOST}/
+      kuma.www.http.parent_name: host-group
+      # The documentation is not on this server (GitHub Pages); it is watched from here so that it is watched at all.
+      kuma.docs.http.name: docs.${SITE_HOST}
+      kuma.docs.http.url: https://docs.${SITE_HOST}/
+      kuma.docs.http.parent_name: host-group
+      kuma.docs.http.interval: 300
     restart: unless-stopped
     network_mode: host
     env_file: .env
