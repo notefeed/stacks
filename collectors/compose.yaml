@@ -1,4 +1,5 @@
-# The collecting side, the same on every server that is monitored: Alloy ships the containers' logs to Loki, the Beszel
+# The collecting side, the same on every server that is monitored: Alloy ships the containers' logs to Loki and the
+# machine's CPU, memory and disk to Prometheus, the Beszel
 # agent answers the hub's questions about the machine. Both talk over the private network only.
 services:
   alloy:
@@ -12,11 +13,16 @@ services:
       - --disable-reporting
     environment:
       LOKI_URL: ${LOKI_URL:?where Loki listens, e.g. http://10.0.0.2:3100}
+      PROMETHEUS_URL: ${PROMETHEUS_URL:?where Prometheus listens, e.g. http://10.0.0.2:9090}
       PRODUCT: ${PRODUCT:?the product this server belongs to}
       HOST_NAME: ${HOST_NAME:?this server's name}
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # The host as it is, read-only, for the machine's numbers.
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host/root:ro,rslave
       - alloy:/var/lib/alloy/data
 
   # Started only with the profile `beszel`, once the hub's key is known (the hub shows it when the server is added).

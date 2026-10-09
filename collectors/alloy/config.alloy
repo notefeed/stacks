@@ -1,4 +1,5 @@
 // The logs of every container on this server, to Loki, labelled with the product and the server they come from.
+// Below them, the machine's own numbers, to Prometheus.
 discovery.docker "containers" {
 	host = "unix:///var/run/docker.sock"
 }
@@ -27,5 +28,51 @@ loki.source.docker "containers" {
 loki.write "default" {
 	endpoint {
 		url = sys.env("LOKI_URL") + "/loki/api/v1/push"
+	}
+}
+
+// The machine itself: CPU, memory, disk and load, read from the host's /proc and /sys (mounted under /host) by the
+// exporter built into Alloy, and sent to Prometheus on the monitoring server. Nothing listens for it on this server.
+prometheus.exporter.unix "host" {
+	procfs_path    = "/host/proc"
+	sysfs_path     = "/host/sys"
+	rootfs_path    = "/host/root"
+	set_collectors = ["cpu", "meminfo", "filesystem", "loadavg", "diskstats"]
+
+	filesystem {
+		mount_points_exclude = "^/(dev|proc|sys|run|boot|var/lib/docker)($|/)"
+		fs_types_exclude     = "^(tmpfs|overlay|squashfs|proc|sysfs|devtmpfs|cgroup2?|nsfs|autofs|binfmt_misc|vfat)$"
+	}
+}
+
+prometheus.scrape "host" {
+	targets         = prometheus.exporter.unix.host.targets
+	scrape_interval = "30s"
+	forward_to      = [prometheus.relabel.host.receiver]
+}
+
+// The same two labels the logs carry, so a server reads the same in both.
+prometheus.relabel "host" {
+	forward_to = [prometheus.remote_write.default.receiver]
+
+	rule {
+		target_label = "host"
+		replacement  = sys.env("HOST_NAME")
+	}
+
+	rule {
+		target_label = "product"
+		replacement  = sys.env("PRODUCT")
+	}
+
+	rule {
+		target_label = "instance"
+		replacement  = sys.env("HOST_NAME")
+	}
+}
+
+prometheus.remote_write "default" {
+	endpoint {
+		url = sys.env("PROMETHEUS_URL") + "/api/v1/write"
 	}
 }
