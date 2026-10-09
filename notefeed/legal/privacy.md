@@ -1,6 +1,6 @@
 # Data privacy
 
-This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 8 October 2026.
+This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 9 October 2026.
 
 ## Controller (Verantwortlicher)
 
@@ -29,6 +29,14 @@ A backup is not changed after it is made, so a feed or note you delete is still 
 
 Feeds have no accounts. Anyone who knows a feed's name can read and post to it, and anyone with its read link can read it, images included. Do not post personal data of other people without a reason to.
 
+## Reports about content
+
+**What:** every note carries a **Report** link that opens a form on report.notefeed.me. A report holds the feed's read id and the note's id (what the link fills in), the reason you choose, what you write, and your e-mail address if you give one. The form runs on the same server, with NocoDB; nothing of a report is sent anywhere else: the operator only gets a notification that says "new report".
+
+**Why and legal basis:** to find and remove content that should not be here, and to answer you if you gave an address (Art. 6 (1) (f) GDPR, legitimate interest; where the report is about unlawful content, also my legal duties as a hosting provider).
+
+**Retention:** when a report has been dealt with, what you wrote and your address are deleted; the bare record (time, reason, what was done) is kept for one year as the proof that reports are handled, then deleted.
+
 ## Server logs and IP addresses
 
 **What:** for every request the web server logs the time, the kind of request (for example "a post to a feed", never which feed or note), the status code and a shortened IP address: its last part is removed before the line is written, so it names a network of many connections, not yours. Your full IP address, your browser's user agent, cookies and the names of feeds are not logged.
@@ -53,7 +61,7 @@ If the instance or a feed is password-protected, a cookie keeps you logged in. I
 
 ## Recipients and automated decisions
 
-Your data is not passed on to anyone except the hosting provider named above, which stores it on my behalf, and, for e-mail you send me, the two mail providers named above. There is no automated decision-making or profiling.
+Your data is not passed on to anyone except the hosting provider named above, which stores it on my behalf, and, for e-mail you send me, the two mail providers named above. The notification that a report arrived goes through ntfy.sh (Philipp C. Heckel, Germany) and carries no part of the report. There is no automated decision-making or profiling.
 
 ## Your rights
 

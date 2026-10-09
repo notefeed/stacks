@@ -26,6 +26,10 @@ services:
       NOTEFEED_PRIVACY_FILE: /legal/privacy.md
       # What the start page says above the introduction, as a warning banner.
       NOTEFEED_NOTICE_FILE: /legal/notice.md
+      # No pictures from anonymous feeds until they are a paid feature (notefeed/notefeed #152), and the "Report" link on every
+      # note, to the form in ../nocodb (#154). Both from notefeed 0.10 on; an older notefeed ignores them.
+      NOTEFEED_IMAGE_UPLOADS: ${NOTEFEED_IMAGE_UPLOADS:-}
+      NOTEFEED_REPORT_URL: ${NOTEFEED_REPORT_URL:-}
     volumes:
       - ./legal:/legal:ro
     ports:
