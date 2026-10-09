@@ -1,6 +1,6 @@
 # Data privacy
 
-This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 8 October 2026.
+This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 9 October 2026.
 
 ## Controller (Verantwortlicher)
 
@@ -21,9 +21,10 @@ The instance runs on servers of Hetzner Online GmbH, Industriestr. 25, 91710 Gun
 **Backups:** so that a failure does not lose your notes, copies are made of what is stored:
 
 - every hour a copy of the database (feeds, notes and their metadata, without the images), kept on the same server for 1 day;
-- every day a backup of the whole server, images included, made and kept by Hetzner for 7 days.
+- every day a copy of the database and a copy of the images, kept on the same server for 30 days;
+- every day a backup of the whole server, made and kept by Hetzner for 7 days.
 
-A backup is not changed after it is made, so a feed or note you delete is still in the backups made before. It is gone from the last of them after 8 days at most: 7 days of server backups, each of which holds up to 1 day of database copies. Backups are stored in Germany, are read only to bring the service back after a failure or a mistake, and are not searched or used for anything else. The legal basis is my legitimate interest, and my duty, to keep the service and your data available (Art. 6 (1) (f), Art. 32 GDPR).
+A backup is not changed after it is made, so a feed or note you delete is still in the backups made before. It is gone from the last of them after 31 days at most: 30 days of daily copies, the last of which was made up to a day after you deleted. Backups are stored in Germany, are read only to bring the service back after a failure or a mistake, and are not searched, not used for anything else, and never used to bring back a feed on request: what you delete stays deleted. The legal basis is my legitimate interest, and my duty, to keep the service and your data available (Art. 6 (1) (f), Art. 32 GDPR).
 
 **Careful with images:** metadata such as the GPS position is left in uploaded images. Anyone who can read the feed can see it. Remove it before uploading if you do not want to share it.
 

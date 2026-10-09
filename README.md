@@ -4,7 +4,7 @@ How [notefeed.me](https://notefeed.me) runs [notefeed](https://github.com/notefe
 
 | Folder | What runs | Reachable |
 |---|---|---|
-| `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint, privacy page and the notice on its start page, `scripts/dump.sh` dumps the database | On the server's private address only: Caddy passes requests on, and the monitoring server scrapes `/metrics` |
+| `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint, privacy page and the notice on its start page, `scripts/dump.sh` dumps the database and `scripts/copy-images.sh` copies the image files | On the server's private address only: Caddy passes requests on, and the monitoring server scrapes `/metrics` |
 | `caddy/` | Caddy: certificates from Let's Encrypt and the front door | Public, ports 80 and 443 |
 | `collectors/` | Alloy (container logs to Loki), the Beszel agent, and AutoKuma, which turns the `kuma.*` labels in these files into monitors in Uptime Kuma | Not from outside |
 
@@ -16,13 +16,13 @@ This repository is checked out on the server. A companion repository, which is p
 - **Nobody edits files on the server.** A change is a commit here, then a deployment.
 - **Versions are pinned.** Dependabot opens a pull request when a new image exists; merging it is the decision to upgrade.
 
-## Dumps of the database
+## Backups: dumps of the database and copies of the images
 
-`notefeed/scripts/dump.sh <kind> <days to keep>` writes one dump to `notefeed/data/dumps` and removes older dumps of the same kind. On the server it runs every hour and before each deployment that changes something, and every dump is kept 1 day; the timers are set up by the companion repository. The images are not in a dump: they are the files in `notefeed/data/s3`. How to restore is at the top of the script.
+`notefeed/scripts/dump.sh <kind> <days to keep>` writes one dump to `notefeed/data/dumps` and removes older dumps of the same kind. On the server it runs every hour (kept 1 day), every day (kept 30 days) and before each deployment that changes something; the timers are set up by the companion repository. The images are not in a dump: they are the files in `notefeed/data/s3`, and `notefeed/scripts/copy-images.sh <kind> <days to keep>` copies them into `notefeed/data/image-copies`, every day, kept 30 days, with unchanged files hard-linked to the previous copy so thirty copies cost one copy plus what changed. How to restore is at the top of each script: a restore is a dump and the copy made the same day.
 
-These dumps are on the same disk as the database. They undo a bad upgrade or a mistake, not the loss of the server.
+Everything stays on the server, on the same disk as the database, plus the 7-day snapshots Hetzner keeps apart from the server. That is a decision ([notefeed/notefeed#157](https://github.com/notefeed/notefeed/issues/157)): nothing is copied outside the account while the service earns nothing. The dumps undo a bad upgrade or a mistake, the snapshots cover a lost disk; the account itself being lost is accepted for now.
 
-The server's own backups go back 7 days and hold the dumps too, so a deleted feed is gone from every backup after 8 days. That is the number on the privacy page.
+A deleted feed is gone from the last backup after 31 days: 30 days of daily dumps and copies, each made up to a day after the deletion. That is the number on the privacy page. Backups are for the operator's disasters only, never for restoring a feed on request: deletion is final for users.
 
 ## Trying it yourself
 
