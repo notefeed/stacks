@@ -6,6 +6,7 @@ How [notefeed.me](https://notefeed.me) runs [notefeed](https://github.com/notefe
 |---|---|---|
 | `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint, privacy page and the notice on its start page, `scripts/dump.sh` dumps the database and `scripts/copy-images.sh` copies the image files | On the server's private address only: Caddy passes requests on, and the monitoring server scrapes `/metrics` |
 | `caddy/` | Caddy: certificates from Let's Encrypt and the front door | Public, ports 80 and 443 |
+| `nocodb/` | NocoDB, where reports about content land: the public report form that notefeed's **Report** link opens, and the operator's view of the reports; `README.md` there is the recipe for the table, the form and the ping | Through Caddy, under `report.<site>` |
 | `collectors/` | Alloy (container logs to Loki), the Beszel agent, and AutoKuma, which turns the `kuma.*` labels in these files into monitors in Uptime Kuma | Not from outside |
 
 ## How it is used
@@ -34,4 +35,4 @@ mkdir -p notefeed/data/s3/notefeed-images
 (cd caddy && docker compose up -d)
 ```
 
-`collectors/` is only useful with a Loki, a Beszel hub and an Uptime Kuma to send to. The settings are explained in notefeed's [documentation](https://docs.notefeed.me/self-hosting/configuration/).
+`nocodb/` needs its own `.env` (`cp nocodb/.env.example nocodb/.env`) and `report.<your host>` pointed at the server. `collectors/` is only useful with a Loki, a Beszel hub and an Uptime Kuma to send to. The settings are explained in notefeed's [documentation](https://docs.notefeed.me/self-hosting/configuration/).

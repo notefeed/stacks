@@ -20,6 +20,10 @@ services:
       kuma.docs.http.url: https://docs.${SITE_HOST}/
       kuma.docs.http.parent_name: host-group
       kuma.docs.http.interval: 300
+      # The report form, as a visitor reaches it.
+      kuma.report.http.name: report.${SITE_HOST}
+      kuma.report.http.url: https://report.${SITE_HOST}/
+      kuma.report.http.parent_name: host-group
     restart: unless-stopped
     network_mode: host
     env_file: .env
