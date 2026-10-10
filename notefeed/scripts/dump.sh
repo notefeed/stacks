@@ -9,8 +9,9 @@
 #
 # The images are not in the dump: they are the files in ../data/s3.
 #
-# To restore into an empty database:
-#   docker exec -i notefeed-db pg_restore -U notefeed -d notefeed --clean --if-exists < data/dumps/<file>
+# To restore, with notefeed stopped (docker stop notefeed; docker start notefeed afterwards), into the running database:
+#   docker exec -i notefeed-db pg_restore -U notefeed -d notefeed --clean --if-exists --no-owner --exit-on-error < data/dumps/<file>
+# Then the image copy of the same day, see copy-images.sh. Tried 2026-10-10.
 set -euo pipefail
 
 kind=${1:?the kind of dump, e.g. hourly}

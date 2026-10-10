@@ -9,7 +9,9 @@
 # removed only after a new one succeeded.
 #
 # To purge one image from every copy (a takedown; the key is the file's name): find image-copies -type f -name '<key>' -delete
-# The database is not in a copy: that is dump.sh. A restore is both: the dump into the database, a copy back into data/s3.
+# The database is not in a copy: that is dump.sh. A restore is both, with notefeed stopped: the dump into the database (see
+# dump.sh), then the copy back as root, since the gateway wrote the objects as root (tried 2026-10-10):
+#   sudo rsync -a --delete --exclude .vgwlocks --exclude .sgwtmp data/image-copies/<folder>/ data/s3/
 set -euo pipefail
 
 kind=${1:?the kind of copy, e.g. daily}
@@ -30,7 +32,8 @@ trap 'rm -rf "$tmp"' EXIT
 
 # The newest complete copy of this kind, for the hard links.
 prev=$(find "$dir" -maxdepth 1 -mindepth 1 -type d -name "$kind-*Z" | sort | tail -n 1)
-rsync -a --delete ${prev:+--link-dest="$prev"} "$src/" "$tmp/"
+# The gateway's own lock and temp folders (.vgwlocks, .sgwtmp) are not objects and stay out.
+rsync -a --delete --exclude .vgwlocks --exclude .sgwtmp ${prev:+--link-dest="$prev"} "$src/" "$tmp/"
 mv "$tmp" "$dest"
 touch "$dest" # rsync gave the folder the store's own time; retention goes by when the copy was made
 
