@@ -35,24 +35,3 @@ www.{$SITE_HOST} {
 	# that header itself and does not pass on one a client sent.
 	reverse_proxy {$UPSTREAM}
 }
-
-# The report form and its admin login (../nocodb): the same log, the same headers, no size to speak of.
-report.{$SITE_HOST} {
-	encode zstd gzip
-
-	log {
-		output stdout
-		import /etc/caddy/access-log.caddy
-	}
-
-	header {
-		Strict-Transport-Security "max-age=31536000"
-		-Server
-	}
-
-	request_body {
-		max_size 2MB
-	}
-
-	reverse_proxy {$REPORT_UPSTREAM}
-}

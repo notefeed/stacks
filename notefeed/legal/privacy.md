@@ -32,7 +32,7 @@ Feeds have no accounts. Anyone who knows a feed's name can read and post to it, 
 
 ## Reports about content
 
-**What:** every note carries a **Report** link that opens a form on report.notefeed.me. A report holds the feed's read id and the note's id (what the link fills in), the reason you choose, what you write, and your e-mail address if you give one. The form runs on the same server, with NocoDB; nothing of a report is sent anywhere else: the operator only gets a notification that says "new report".
+**What:** every note carries a **Report** link that opens the form at notefeed.me/report. A report holds the feed's read id and the note's id (what the link fills in), the reason you choose, what you write, and your e-mail address if you give one. The form sends it to an inbox I run myself (noticebox, on a server of mine at the same hosting provider), not to a third party; the operator only gets a notification that says that a new report arrived, with a link to it.
 
 **Why and legal basis:** to find and remove content that should not be here, and to answer you if you gave an address (Art. 6 (1) (f) GDPR, legitimate interest; where the report is about unlawful content, also my legal duties as a hosting provider).
 
