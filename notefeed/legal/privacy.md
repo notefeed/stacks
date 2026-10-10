@@ -36,7 +36,7 @@ Feeds have no accounts. Anyone who knows a feed's name can read and post to it, 
 
 **Why and legal basis:** to find and remove content that should not be here, and to answer you if you gave an address (Art. 6 (1) (f) GDPR, legitimate interest; where the report is about unlawful content, also my legal duties as a hosting provider).
 
-**Retention:** when a report has been dealt with, what you wrote and your address are deleted; the bare record (time, reason, what was done) is kept for one year as the proof that reports are handled, then deleted.
+**Retention:** when a report has been dealt with, what you wrote and your address are deleted the day after. The anonymised record (time, the reason category, the ids of the note, what was decided and why) is kept for audit purposes, as the proof that reports are handled; it names nobody.
 
 ## Server logs and IP addresses
 
