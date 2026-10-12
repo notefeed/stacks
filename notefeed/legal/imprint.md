@@ -5,6 +5,8 @@
 Marcel Bruckner\
 Germany
 
+The full legal notice with the postal address is the one for all my sites, in German: [marcelbruckner.de/impressum](https://marcelbruckner.de/impressum). It covers notefeed.me.
+
 ## Contact
 
 Email: [hello@notefeed.me](mailto:hello@notefeed.me)\

@@ -1,10 +1,10 @@
 # Data privacy
 
-This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 9 October 2026.
+This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 12 October 2026.
 
 ## Controller (Verantwortlicher)
 
-Marcel Bruckner, Kempten, Germany. Email: [privacy@notefeed.me](mailto:privacy@notefeed.me). No data protection officer is appointed, as none is required.
+Marcel Bruckner, Kempten, Germany; the postal address is in the [legal notice](https://marcelbruckner.de/impressum). Email: [privacy@notefeed.me](mailto:privacy@notefeed.me). No data protection officer is appointed, as none is required.
 
 ## Hosting
 
