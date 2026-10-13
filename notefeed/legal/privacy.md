@@ -1,6 +1,6 @@
 # Data privacy
 
-This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 9 October 2026.
+This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 13 October 2026.
 
 ## Controller (Verantwortlicher)
 
@@ -8,7 +8,9 @@ Marcel Bruckner, Kempten, Germany. Email: [privacy@notefeed.me](mailto:privacy@n
 
 ## Hosting
 
-The instance runs on servers of Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Germany, in a data centre in Germany. Hetzner stores the data on my behalf under a data processing agreement (Art. 28 GDPR) and is the only processor of what you post. Requests reach the server directly, with no other company in between. Notes, feeds, images and logs are not transferred to third countries; e-mail you send me is the one exception, see below.
+The instance runs on servers of Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Germany, in a data centre in Germany. Hetzner stores the data on my behalf under a data processing agreement (Art. 28 GDPR) and is the only processor of what you post. Requests reach the server directly, with no other company in between. Notes, feeds, images, logs and e-mail are not transferred to third countries.
+
+The domain notefeed.me is registered with Cloudflare, Inc. (USA), which also answers DNS queries for it. That is the lookup of the server's address; Cloudflare sees the address of the resolver that asks, not yours, and no request to the site passes through Cloudflare.
 
 ## Notes, feeds and images
 
@@ -50,7 +52,7 @@ Separately, notefeed uses your IP address to rate-limit posting and failed passw
 
 ## E-mail
 
-**What:** if you write to an address at notefeed.me, your message with your address is received by Cloudflare, Inc., which routes mail for the domain, and forwarded to my mailbox at Google (Gmail). Both are companies in the USA, so your message is transferred there.
+**What:** if you write to an address at notefeed.me, your message with your address is received and stored in my mailbox at Hetzner Online GmbH (web hosting, Germany), the same provider as above, under the same data processing agreement. Mail I send from the domain goes out from the same mailbox.
 
 **Why and legal basis:** to read and answer what you wrote (Art. 6 (1) (f) GDPR, legitimate interest; Art. 6 (1) (b) if it is about a contract).
 
@@ -62,7 +64,7 @@ If the instance or a feed is password-protected, a cookie keeps you logged in. I
 
 ## Recipients and automated decisions
 
-Your data is not passed on to anyone except the hosting provider named above, which stores it on my behalf, and, for e-mail you send me, the two mail providers named above. The notification that a report arrived goes through ntfy.sh (Philipp C. Heckel, Germany) and carries no part of the report. There is no automated decision-making or profiling.
+Your data is not passed on to anyone except the hosting provider named above, which stores it on my behalf (including e-mail you send me). The notification that a report arrived goes through ntfy.sh (Philipp C. Heckel, Germany) and carries no part of the report. There is no automated decision-making or profiling.
 
 ## Your rights
 
