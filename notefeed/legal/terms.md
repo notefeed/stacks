@@ -21,6 +21,12 @@ notefeed.me lets anyone post short notes and pictures to a named feed, by script
 
 Within 14 days of your first payment you can ask for your money back without giving a reason, by writing to [support@notefeed.me](mailto:support@notefeed.me) or through Creem. A refunded license ends at once.
 
+## Consumer dispute resolution (Verbraucherstreitbeilegung, § 36 VSBG)
+
+Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+
+(I am neither willing nor obliged to take part in dispute resolution proceedings before a consumer arbitration board.)
+
 ## What you may not post
 
 Anything illegal. Every note has a **Report** link. A feed that is reported for illegal content may be removed at once, with its pictures, and its pictures may be blocked from being posted again; a license on a removed feed stays with its owner and can be used on another feed. We may do this without asking you first.
