@@ -23,7 +23,7 @@ The domain notefeed.me is registered with Cloudflare, Inc. (USA), which also ans
 **Backups:** so that a failure does not lose your notes, copies are made of what is stored:
 
 - every hour a copy of the database (feeds, notes and their metadata, without the images), kept on the same server for 1 day;
-- every day a copy of the database and a copy of the images, kept on the same server for 30 days;
+- every day a copy of the database and a copy of the images, kept on the same server for 30 days; the licenses are in the copies of the database;
 - every day a backup of the whole server, made and kept by Hetzner for 7 days.
 
 A backup is not changed after it is made, so a feed or note you delete is still in the backups made before. It is gone from the last of them after 31 days at most: 30 days of daily copies, the last of which was made up to a day after you deleted. Backups are stored in Germany, are read only to bring the service back after a failure or a mistake, and are not searched, not used for anything else, and never used to bring back a feed on request: what you delete stays deleted. The legal basis is my legitimate interest, and my duty, to keep the service and your data available (Art. 6 (1) (f), Art. 32 GDPR).
@@ -31,6 +31,16 @@ A backup is not changed after it is made, so a feed or note you delete is still 
 **Careful with images:** metadata such as the GPS position is left in uploaded images. Anyone who can read the feed can see it. Remove it before uploading if you do not want to share it.
 
 Feeds have no accounts. Anyone who knows a feed's name can read and post to it, and anyone with its read link can read it, images included. Do not post personal data of other people without a reason to.
+
+## Licenses and payment
+
+**What:** a license for a feed is paid for through Creem (creem.io), which is the seller of record and collects your payment and contact data (name, e-mail address, country, payment details) itself, under its own privacy policy. I receive from Creem only what the license needs: that a subscription exists, whether it is paid and until when. After payment a license key is shown to you; notefeed stores only a one-way fingerprint (hash) of it, the subscription's reference at Creem, its status and the feed it is entered on. I do not learn who you are from this, and a lost key cannot be recovered.
+
+**Why and legal basis:** to provide the license you bought (Art. 6 (1) (b) GDPR) and to keep the records the law requires, which Creem keeps as the seller.
+
+**Retention:** the license record stays as long as the license exists, so that a lapsed license can be renewed or entered again. On request I delete it. It is part of the backups described above.
+
+**Recipients:** Creem, which processes your payment as its own controller and as a merchant of record. Please read its privacy policy on creem.io too.
 
 ## Reports about content
 
@@ -64,7 +74,7 @@ If the instance or a feed is password-protected, a cookie keeps you logged in. I
 
 ## Recipients and automated decisions
 
-Your data is not passed on to anyone except the hosting provider named above, which stores it on my behalf (including e-mail you send me). The notification that a report arrived goes through ntfy.sh (Philipp C. Heckel, Germany) and carries no part of the report. There is no automated decision-making or profiling.
+Your data is not passed on to anyone except the hosting provider named above, which stores it on my behalf (including e-mail you send me), and, if you buy a license, Creem (see above). The notification that a report arrived goes through ntfy.sh (Philipp C. Heckel, Germany) and carries no part of the report. There is no automated decision-making or profiling.
 
 ## Your rights
 
