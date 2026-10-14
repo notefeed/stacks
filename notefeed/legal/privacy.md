@@ -1,6 +1,6 @@
 # Data privacy
 
-This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 13 October 2026.
+This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 14 October 2026.
 
 ## Controller (Verantwortlicher)
 
@@ -68,9 +68,11 @@ Separately, notefeed uses your IP address to rate-limit posting and failed passw
 
 **Retention:** until the matter is settled, and longer only where the law requires keeping business mail.
 
-## Cookies
+## Cookies and storage in your browser
 
 If the instance or a feed is password-protected, a cookie keeps you logged in. It is strictly necessary to provide the service you requested (§ 25 (2) no. 2 TDDDG), so no consent is needed. It holds no personal data and carries no tracking. There are no analytics, advertising or third-party requests, and nothing is loaded from external servers.
+
+The feeds you open are remembered in your browser's local storage, so that they are listed under "Your feeds": the feed's name, its title and the address of its title image. This list stays on your device and is never sent to the server or anyone else. You can remove a feed from it with "Forget on this device", or remove the whole list by clearing the site's data in your browser. Storing it is strictly necessary for the list you use (§ 25 (2) no. 2 TDDDG).
 
 ## Recipients and automated decisions
 
