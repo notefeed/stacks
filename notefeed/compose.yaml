@@ -24,8 +24,6 @@ services:
       # This instance's own imprint and privacy page (./legal); notefeed ships neither.
       NOTEFEED_IMPRINT_FILE: /legal/imprint.md
       NOTEFEED_PRIVACY_FILE: /legal/privacy.md
-      # What the start page says above the introduction, as a warning banner.
-      NOTEFEED_NOTICE_FILE: /legal/notice.md
       # The terms page, the footer's "Terms" (newer than notefeed 0.11; an older notefeed ignores it).
       NOTEFEED_TERMS_FILE: /legal/terms.md
       # The licenses are a SQLite file of their own, next to the database but not in it (notefeed/notefeed #42).

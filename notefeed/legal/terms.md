@@ -1,6 +1,6 @@
 # Terms
 
-Last updated: 13 October 2026. These are the terms of the hosted service at notefeed.me, run by Marcel Bruckner, Germany ([legal notice](/imprint)). The software itself is open source and free to run yourself; these terms are about the hosted service only.
+Last updated: 14 October 2026. These are the terms of the hosted service at notefeed.me, run by Marcel Bruckner, Germany ([legal notice](/imprint)). The software itself is open source and free to run yourself; these terms are about the hosted service only.
 
 ## The service
 
@@ -15,7 +15,7 @@ notefeed.me lets anyone post short notes and pictures to a named feed, by script
 - **Price:** EUR 1.50 per month per feed, a subscription that renews every month until cancelled. The price shown at checkout, with the VAT that applies to you, is the price you pay.
 - **Seller:** payment, invoicing, VAT and the customer portal are handled by Creem (creem.io), which is the seller of record. Your payment data is given to Creem, not to notefeed.
 - **Delivery:** after payment a license key is shown on the page you are sent back to. Enter it in the feed's settings. The key belongs to one feed at a time and can be moved to another feed. notefeed stores no information about you, only a one-way fingerprint of the key, so **a lost key cannot be recovered**: keep it, and keep Creem's receipt.
-- **Cancelling:** at any time, in Creem's customer portal. The license stays until the end of the period you paid for. Then the feed goes back to the free tier. Nothing is deleted: pictures already stored are still shown, and a feed password stays in force, but you cannot add pictures or change the password until the feed has a license again.
+- **Cancelling:** at any time, in Creem's customer portal: open it from [notefeed.me/license](/license) with your license key, or through the link in Creem's receipt. The license stays until the end of the period you paid for. Then the feed goes back to the free tier. Nothing is deleted: pictures already stored are still shown, and a feed password stays in force, but you cannot add pictures or change the password until the feed has a license again.
 
 ## Refunds
 
