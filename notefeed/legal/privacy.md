@@ -25,8 +25,9 @@ The domain notefeed.me is registered with Cloudflare, Inc. (USA), which also ans
 - every hour a copy of the database (feeds, notes and their metadata, without the images), kept on the same server for 1 day;
 - every day a copy of the database and a copy of the images, kept on the same server for 30 days; the licenses are in the copies of the database;
 - every day a backup of the whole server, made and kept by Hetzner for 7 days.
+- every day the newest daily copy of the database and of the images, encrypted on the server before it leaves it, to a storage space at Hetzner that is separate from the server (Hetzner Storage Box, Germany), kept up to 30 days.
 
-A backup is not changed after it is made, so a feed or note you delete is still in the backups made before. It is gone from the last of them after 31 days at most: 30 days of daily copies, the last of which was made up to a day after you deleted. Backups are stored in Germany, are read only to bring the service back after a failure or a mistake, and are not searched, not used for anything else, and never used to bring back a feed on request: what you delete stays deleted. The legal basis is my legitimate interest, and my duty, to keep the service and your data available (Art. 6 (1) (f), Art. 32 GDPR).
+A backup is not changed after it is made, so a feed or note you delete is still in the backups made before. It is gone from the last of them after 31 days at most: 30 days of daily copies, the last of which was made up to a day after you deleted; the copy at the Storage Box is removed on the same schedule. Backups are stored in Germany, are read only to bring the service back after a failure or a mistake, and are not searched, not used for anything else, and never used to bring back a feed on request: what you delete stays deleted. The legal basis is my legitimate interest, and my duty, to keep the service and your data available (Art. 6 (1) (f), Art. 32 GDPR).
 
 **Careful with images:** metadata such as the GPS position is left in uploaded images. Anyone who can read the feed can see it. Remove it before uploading if you do not want to share it.
 
