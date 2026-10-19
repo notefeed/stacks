@@ -1,6 +1,6 @@
 version: 2
 updates:
   - package-ecosystem: docker-compose
-    directories: ["/notefeed", "/caddy", "/collectors"]
+    directories: ["/notefeed", "/caddy", "/collectors", "/gesetze-fuer-ki"]
     schedule:
       interval: weekly
