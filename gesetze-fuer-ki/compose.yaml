@@ -1,0 +1,23 @@
+# gesetze-fuer-ki.de: the MCP server for German federal law, and its documentation site
+# (https://github.com/Marceltov/Gesetze-fuer-KI). A second product on this server, independent of notefeed: no database,
+# no secrets. It clones the public data repository Marceltov/gesetze into ./data, pulls it every hour and keeps its
+# search index next to it; all of ./data can be deleted and is rebuilt on the next start (~1 minute).
+# Listens on the server's private address only, like notefeed: Caddy (../caddy) passes requests on.
+services:
+  gesetze-fuer-ki:
+    image: ghcr.io/marceltov/gesetze-fuer-ki:0.1.1
+    container_name: gesetze-fuer-ki
+    # Monitored by Uptime Kuma (see ../collectors: AutoKuma reads these labels), past Caddy; the public name is checked
+    # in ../caddy. The keyword is false until the index is built, so a server that runs but cannot search shows as down.
+    labels:
+      kuma.gesetze.keyword.name: gesetze-fuer-ki (direct)
+      kuma.gesetze.keyword.url: http://${PRIVATE_IP}:8081/health
+      kuma.gesetze.keyword.keyword: '"ready":true'
+      kuma.gesetze.keyword.parent_name: host-group
+    restart: unless-stopped
+    # No ALLOWED_HOSTS: the check against DNS rebinding protects servers on localhost; this one is public, holds public
+    # data and no session worth taking, and the check would turn Uptime Kuma's direct request away.
+    volumes:
+      - ./data:/data
+    ports:
+      - "${PRIVATE_IP:?this server's address on the private network}:8081:8081"

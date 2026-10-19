@@ -20,6 +20,10 @@ services:
       kuma.docs.http.url: https://docs.${SITE_HOST}/
       kuma.docs.http.parent_name: host-group
       kuma.docs.http.interval: 300
+      # gesetze-fuer-ki.de as a visitor reaches it (../gesetze-fuer-ki).
+      kuma.gesetze-site.http.name: ${GESETZE_HOST}
+      kuma.gesetze-site.http.url: https://${GESETZE_HOST}/
+      kuma.gesetze-site.http.parent_name: host-group
     restart: unless-stopped
     network_mode: host
     env_file: .env
