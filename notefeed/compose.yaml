@@ -72,7 +72,7 @@ services:
   # The image bytes: Versity Gateway, an S3 server over a plain folder. A bucket is a folder in ./data/s3 and an object
   # a file in it. Any S3-compatible store can take its place; only the endpoint and the keys change.
   s3:
-    image: versity/versitygw:v1.8.0
+    image: versity/versitygw:v1.9.0
     container_name: notefeed-s3
     restart: unless-stopped
     command: posix /data
