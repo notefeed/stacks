@@ -1,11 +1,11 @@
-# gesetze-fuer-ki.de: the MCP server for German federal law, and its documentation site
+# gesetze-fuer-ki.de: the MCP server for German federal and state law, and its documentation site
 # (https://github.com/Marceltov/Gesetze-fuer-KI). A second product on this server, independent of notefeed: no database,
-# no secrets. It clones the public data repository Marceltov/gesetze into ./data, pulls it every hour and keeps its
-# search index next to it; all of ./data can be deleted and is rebuilt on the next start (~1 minute).
+# no secrets. It clones the public data repositories (gesetze, plus landesrecht-<land> for each mirrored state) into
+# ./data, pulls them every hour and keeps its search index next to them; all of ./data can be deleted and is rebuilt on the next start (~1 minute).
 # Listens on the server's private address only, like notefeed: Caddy (../caddy) passes requests on.
 services:
   gesetze-fuer-ki:
-    image: ghcr.io/gesetze-fuer-ki/gesetze-fuer-ki:0.1.5
+    image: ghcr.io/gesetze-fuer-ki/gesetze-fuer-ki:0.2.0
     container_name: gesetze-fuer-ki
     # Monitored by Uptime Kuma (see ../collectors: AutoKuma reads these labels), past Caddy; the public name is checked
     # in ../caddy. The keyword is false until the index is built, so a server that runs but cannot search shows as down.
