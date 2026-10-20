@@ -5,7 +5,7 @@
 # Listens on the server's private address only, like notefeed: Caddy (../caddy) passes requests on.
 services:
   gesetze-fuer-ki:
-    image: ghcr.io/gesetze-fuer-ki/gesetze-fuer-ki:0.2.3
+    image: ghcr.io/gesetze-fuer-ki/gesetze-fuer-ki:0.2.4
     container_name: gesetze-fuer-ki
     # Monitored by Uptime Kuma (see ../collectors: AutoKuma reads these labels), past Caddy; the public name is checked
     # in ../caddy. The keyword is false until the index is built, so a server that runs but cannot search shows as down.
