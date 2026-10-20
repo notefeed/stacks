@@ -37,8 +37,10 @@ www.{$SITE_HOST} {
 }
 
 # gesetze-fuer-ki.de (../gesetze-fuer-ki): the documentation at /, the MCP endpoint at /mcp, both from one container.
-www.{$GESETZE_HOST} {
-	redir https://{$GESETZE_HOST}{uri} permanent
+# Its other names (www., gesetze-für-ki.de, the .online pair; the list is GESETZE_REDIRECTS) all lead to the one name.
+# 308 keeps the method, so an MCP client that POSTs to an old name still reaches /mcp.
+{$GESETZE_REDIRECTS} {
+	redir https://{$GESETZE_HOST}{uri} 308
 }
 
 {$GESETZE_HOST} {
