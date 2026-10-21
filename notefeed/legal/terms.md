@@ -6,7 +6,7 @@ Last updated: 14 October 2026. These are the terms of the hosted service at note
 
 notefeed.me lets anyone post short notes and pictures to a named feed, by script, API or web page, and read them back as RSS. Using it for free needs no account: whoever knows a feed's name can read and post to it, so choose a name nobody can guess.
 
-**Free:** each feed keeps its newest 1000 notes (the oldest is removed when a new one is posted), with no pictures and no feed password.
+**Free:** each feed keeps its newest 100 notes (the oldest is removed when a new one is posted), with no pictures and no feed password.
 
 **With a license** (per feed): no limit on stored notes, pictures, and a feed password for that feed. Readers never pay.
 

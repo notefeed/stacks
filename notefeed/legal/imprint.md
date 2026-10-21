@@ -16,7 +16,7 @@ Security issues: [security@notefeed.me](mailto:security@notefeed.me)
 
 ## Value added tax
 
-No VAT is charged because of the small business exemption (Kleinunternehmerregelung) under § 19 UStG. There is therefore no VAT ID.
+Licenses are sold by Creem (Armitage Labs OÜ, Estonia) as merchant of record, which charges VAT to the buyer. I myself charge no VAT because of the small business exemption (Kleinunternehmerregelung) under § 19 UStG, so there is no VAT ID.
 
 ## Responsible for content (§ 18 (2) MStV)
 
