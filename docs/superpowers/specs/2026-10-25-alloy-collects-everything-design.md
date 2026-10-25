@@ -39,11 +39,11 @@ because Loki only receives logs that are pushed, so it carries everything.
 | notefeed | `PRIVATE_IP:3000/metrics` | bearer, `vault_notefeed_metrics_token` → collectors `.env` | `notefeed` |
 | Caddy | admin endpoint 127.0.0.1:2019 | none | `caddy` (host → site, totals only) |
 | PostgreSQL | exporter 127.0.0.1:9187 (profile `postgres`) | login `monitor`, `vault_postgres_monitor_password` | `postgres` |
-| healthchecks | `healthchecks.io/projects/<id>/metrics/<key>` | `vault_healthchecks_api_key` (notefeed's project, full-access key) | `healthchecks` |
+| healthchecks | `healthchecks.io/projects/<id>/metrics/<key>` | `vault_healthchecks_readonly_key` (notefeed's project, read-only key; the metrics address takes no other) | `healthchecks` |
 
 healthchecks is off until notefeed's project id is known (`healthchecks_notefeed_project` in notefeed-ansible's vars.yml,
-not a secret). Whether its metrics address accepts a full-access key is checked then; if not, a read-only key goes into
-the vault in its place.
+not a secret) and a read-only key in the vault (review 2026-10-25: the metrics address takes only that one, and a full-access
+key would sit in Alloy's target list).
 
 ## Outages
 
