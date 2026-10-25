@@ -1,5 +1,5 @@
 // The logs of every container on this server, to Loki, labelled with the product and the server they come from.
-// Below them, the machine's own numbers, to Prometheus.
+// Below them, the machine's own numbers and Caddy's counts, to Prometheus.
 discovery.docker "containers" {
 	host = "unix:///var/run/docker.sock"
 }
@@ -80,6 +80,36 @@ prometheus.relabel "host" {
 	rule {
 		target_label = "instance"
 		replacement  = sys.env("HOST_NAME")
+	}
+}
+
+// Caddy's counts per host name (../caddy, the global option `metrics`), from its admin endpoint on this host. Caddy calls
+// the host name `host`, which here is the server's name, so it becomes `site`. Only the totals are kept, not the
+// histograms' buckets nor Go's own numbers: a year of them stays small. Where there is no Caddy, the target is down.
+prometheus.scrape "caddy" {
+	targets         = [{"__address__" = "127.0.0.1:2019"}]
+	job_name        = "caddy"
+	scrape_interval = "60s"
+	forward_to      = [prometheus.relabel.caddy.receiver]
+}
+
+prometheus.relabel "caddy" {
+	forward_to = [prometheus.relabel.host.receiver]
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "caddy_http_(requests_total|request_duration_seconds_(count|sum)|request_size_bytes_(count|sum)|response_size_bytes_(count|sum))|up"
+		action        = "keep"
+	}
+
+	rule {
+		source_labels = ["host"]
+		target_label  = "site"
+	}
+
+	rule {
+		regex  = "host"
+		action = "labeldrop"
 	}
 }
 
