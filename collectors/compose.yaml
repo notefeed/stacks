@@ -19,6 +19,10 @@ services:
       PROMETHEUS_URL: ${PROMETHEUS_URL:?where Prometheus listens, e.g. http://10.0.0.2:9090}
       PRODUCT: ${PRODUCT:?the product this server belongs to}
       HOST_NAME: ${HOST_NAME:?this server's name}
+      PRIVATE_IP: ${PRIVATE_IP:?this server's address on the private network}
+      NOTEFEED_METRICS_TOKEN: ${NOTEFEED_METRICS_TOKEN:?the token of notefeed's /metrics}
+      # JSON: [] while healthchecks is not set up (Ansible writes it).
+      HEALTHCHECKS_TARGETS: ${HEALTHCHECKS_TARGETS:-[]}
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
