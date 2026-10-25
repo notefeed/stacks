@@ -31,13 +31,25 @@ loki.write "default" {
 	}
 }
 
-// The machine itself: CPU, memory, disk and load, read from the host's /proc and /sys (mounted under /host) by the
+// The machine itself: CPU, memory, disk, load and network, read from the host's /proc and /sys (mounted under /host) by the
 // exporter built into Alloy, and sent to Prometheus on the monitoring server. Nothing listens for it on this server.
+// systemd: the state and the last start of the backup units (notefeed-dump-*, notefeed-offsite), asked over the host's D-Bus
+// socket, for the backup age on the operator dashboard. Only those units: their names, never what they hold.
 prometheus.exporter.unix "host" {
 	procfs_path    = "/host/proc"
 	sysfs_path     = "/host/sys"
 	rootfs_path    = "/host/root"
-	set_collectors = ["cpu", "meminfo", "filesystem", "loadavg", "diskstats"]
+	set_collectors = ["cpu", "meminfo", "filesystem", "loadavg", "diskstats", "netdev", "systemd"]
+
+	netdev {
+		// The host's own interfaces: the containers' virtual ones and the bridges count the same bytes again.
+		device_exclude = "^(lo|veth.*|docker.*|br-.*)$"
+	}
+
+	systemd {
+		unit_include = "notefeed-(dump-.+|offsite)\\.(service|timer)"
+		start_time   = true
+	}
 
 	filesystem {
 		mount_points_exclude = "^/(dev|proc|sys|run|boot|var/lib/docker)($|/)"

@@ -1,11 +1,14 @@
 # The collecting side, the same on every server that is monitored: Alloy ships the containers' logs to Loki and the
-# machine's CPU, memory and disk to Prometheus, the Beszel
+# machine's CPU, memory, disk, network and backup units to Prometheus, the Beszel
 # agent answers the hub's questions about the machine. Both talk over the private network only.
 services:
   alloy:
     image: grafana/alloy:v1.20.1
     container_name: alloy
     restart: unless-stopped
+    # The host's network, so the collector `netdev` counts the server's interfaces and not the container's own (/proc/net is
+    # the reading process's). Alloy's own HTTP server stays on 127.0.0.1:12345.
+    network_mode: host
     command:
       - run
       - /etc/alloy/config.alloy
@@ -23,6 +26,8 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/host/root:ro,rslave
+      # The host's systemd, read-only, for the backup units' state (config.alloy, the collector `systemd`).
+      - /run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
       - alloy:/var/lib/alloy/data
 
   # Started only with the profile `beszel`, once the hub's key is known (the hub shows it when the server is added).
