@@ -7,7 +7,7 @@ How [notefeed.me](https://notefeed.me) runs [notefeed](https://github.com/notefe
 | `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint, privacy page, terms and the license page's words (`license.md`), `scripts/dump.sh` dumps the database and `scripts/copy-images.sh` copies the image files | On the server's private address only: Caddy passes requests on, and the monitoring server scrapes `/metrics` |
 | `caddy/` | Caddy: certificates from Let's Encrypt and the front door | Public, ports 80 and 443 |
 | `gesetze-fuer-ki/` | [gesetze-fuer-ki.de](https://gesetze-fuer-ki.de), a second product on this server: the MCP server for German federal law and its documentation; `data/` is its clone of the law texts and its search index, rebuilt when deleted | On the server's private address only: Caddy passes requests on |
-| `collectors/` | Alloy (container logs to Loki), the Beszel agent, and AutoKuma, which turns the `kuma.*` labels in these files into monitors in Uptime Kuma | Not from outside |
+| `collectors/` | Alloy (container logs to Loki; the machine's, notefeed's, Caddy's, PostgreSQL's and healthchecks' numbers to Prometheus, which fetches nothing from this server itself), the Beszel agent, AutoKuma, which turns the `kuma.*` labels in these files into monitors in Uptime Kuma, and the PostgreSQL exporter (profile `postgres`, once its login has a password) | Not from outside |
 
 ## How it is used
 

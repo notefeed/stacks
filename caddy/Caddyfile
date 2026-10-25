@@ -1,6 +1,13 @@
 {
 	email {$ACME_EMAIL}
 
+	# Requests and bytes per host name for Prometheus, kept 400 days where the access log in Loki is kept 14: on the admin
+	# endpoint (127.0.0.1:2019, this host only), scraped by Alloy (../collectors). No addresses and no paths, only counts
+	# per host name, status and method. Only the names below count; a request for any other name is not counted.
+	metrics {
+		per_host
+	}
+
 	# Caddy's own log: its error lines describe the request, so they get the same treatment as the access log.
 	log {
 		import /etc/caddy/access-log.caddy

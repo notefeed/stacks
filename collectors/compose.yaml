@@ -19,6 +19,10 @@ services:
       PROMETHEUS_URL: ${PROMETHEUS_URL:?where Prometheus listens, e.g. http://10.0.0.2:9090}
       PRODUCT: ${PRODUCT:?the product this server belongs to}
       HOST_NAME: ${HOST_NAME:?this server's name}
+      PRIVATE_IP: ${PRIVATE_IP:?this server's address on the private network}
+      NOTEFEED_METRICS_TOKEN: ${NOTEFEED_METRICS_TOKEN:?the token of notefeed's /metrics}
+      # JSON: [] while healthchecks is not set up (Ansible writes it).
+      HEALTHCHECKS_TARGETS: ${HEALTHCHECKS_TARGETS:-[]}
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -45,6 +49,28 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./data/beszel-agent:/var/lib/beszel-agent
+
+  # PostgreSQL in depth for the operator dashboard (notefeed/ansible#21): cache hits, locks, vacuum, long transactions. Started
+  # only with the profile `postgres`, once the login `monitor` (pg_monitor: reads statistics, no data) has its password. On
+  # notefeed's network, where the database is; its numbers on 127.0.0.1:9187 for Alloy. Only on the notefeed server.
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
+    container_name: postgres-exporter
+    restart: unless-stopped
+    profiles: ["postgres"]
+    mem_limit: 128m
+    environment:
+      DATA_SOURCE_URI: db:5432/notefeed?sslmode=disable
+      DATA_SOURCE_USER: monitor
+      DATA_SOURCE_PASS: ${POSTGRES_MONITOR_PASSWORD:-}
+    command:
+      # The vacuum and dead rows of each of notefeed's tables; the per-setting numbers are many and say little.
+      - --collector.stat_user_tables
+      - --no-collector.settings
+    ports:
+      - "127.0.0.1:9187:9187"
+    networks:
+      - notefeed
 
   # AutoKuma turns the `kuma.*` labels of this server's containers into monitors in the Uptime Kuma on the monitoring
   # server, and removes a monitor when its container is removed. Started only with the profile `autokuma`, once Uptime
@@ -83,3 +109,9 @@ services:
 volumes:
   alloy:
   autokuma:
+
+# notefeed's own network (../notefeed), for the exporter to reach the database.
+networks:
+  notefeed:
+    name: notefeed
+    external: true
