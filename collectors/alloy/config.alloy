@@ -1,5 +1,5 @@
 // The logs of every container on this server, to Loki, labelled with the product and the server they come from.
-// Below them, the machine's own numbers and Caddy's counts, to Prometheus.
+// Below them, the numbers, to Prometheus: the machine's, notefeed's, Caddy's, PostgreSQL's and healthchecks'.
 discovery.docker "containers" {
 	host = "unix:///var/run/docker.sock"
 }
@@ -81,6 +81,25 @@ prometheus.relabel "host" {
 		target_label = "instance"
 		replacement  = sys.env("HOST_NAME")
 	}
+}
+
+// notefeed's own numbers (its /metrics, on this server's private address, behind the token), fetched here and sent on like
+// everything else: Prometheus fetches nothing from this server itself (docs/superpowers/specs/2026-10-25-alloy-collects-everything-design.md).
+prometheus.scrape "notefeed" {
+	targets         = [{"__address__" = sys.env("PRIVATE_IP") + ":3000"}]
+	job_name        = "notefeed"
+	scrape_interval = "30s"
+	bearer_token    = sys.env("NOTEFEED_METRICS_TOKEN")
+	forward_to      = [prometheus.relabel.host.receiver]
+}
+
+// notefeed's backup checks at healthchecks.io: up, down or started per check, for "notefeed: operator". The target, with
+// the project and its key in the address, comes from Ansible as JSON; an empty list until the project is known.
+prometheus.scrape "healthchecks" {
+	targets         = encoding.from_json(sys.env("HEALTHCHECKS_TARGETS"))
+	job_name        = "healthchecks"
+	scrape_interval = "60s"
+	forward_to      = [prometheus.relabel.host.receiver]
 }
 
 // Caddy's counts per host name (../caddy, the global option `metrics`), from its admin endpoint on this host. Caddy calls
