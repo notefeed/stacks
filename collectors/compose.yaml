@@ -50,6 +50,28 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./data/beszel-agent:/var/lib/beszel-agent
 
+  # PostgreSQL in depth for the operator dashboard (notefeed/ansible#21): cache hits, locks, vacuum, long transactions. Started
+  # only with the profile `postgres`, once the login `monitor` (pg_monitor: reads statistics, no data) has its password. On
+  # notefeed's network, where the database is; its numbers on 127.0.0.1:9187 for Alloy. Only on the notefeed server.
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
+    container_name: postgres-exporter
+    restart: unless-stopped
+    profiles: ["postgres"]
+    mem_limit: 128m
+    environment:
+      DATA_SOURCE_URI: db:5432/notefeed?sslmode=disable
+      DATA_SOURCE_USER: monitor
+      DATA_SOURCE_PASS: ${POSTGRES_MONITOR_PASSWORD:-}
+    command:
+      # The vacuum and dead rows of each of notefeed's tables; the per-setting numbers are many and say little.
+      - --collector.stat_user_tables
+      - --no-collector.settings
+    ports:
+      - "127.0.0.1:9187:9187"
+    networks:
+      - notefeed
+
   # AutoKuma turns the `kuma.*` labels of this server's containers into monitors in the Uptime Kuma on the monitoring
   # server, and removes a monitor when its container is removed. Started only with the profile `autokuma`, once Uptime
   # Kuma has its account. Each server brings its own notification, so no server depends on what another one defined.
@@ -87,3 +109,9 @@ services:
 volumes:
   alloy:
   autokuma:
+
+# notefeed's own network (../notefeed), for the exporter to reach the database.
+networks:
+  notefeed:
+    name: notefeed
+    external: true
