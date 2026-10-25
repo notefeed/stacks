@@ -113,6 +113,25 @@ prometheus.relabel "caddy" {
 	}
 }
 
+// PostgreSQL's statistics from the exporter in ../compose.yaml (profile `postgres`): the server-wide ones, notefeed's
+// tables and the transactions running now. No query text, no data. Without the exporter the target is down.
+prometheus.scrape "postgres" {
+	targets         = [{"__address__" = "127.0.0.1:9187"}]
+	job_name        = "postgres"
+	scrape_interval = "30s"
+	forward_to      = [prometheus.relabel.postgres.receiver]
+}
+
+prometheus.relabel "postgres" {
+	forward_to = [prometheus.relabel.host.receiver]
+
+	rule {
+		source_labels = ["__name__"]
+		regex         = "pg_(up|database_size_bytes|stat_database_.+|locks_count|stat_activity_(count|max_tx_duration)|stat_user_tables_.+|stat_bgwriter_.+|stat_checkpointer_.+)|up"
+		action        = "keep"
+	}
+}
+
 prometheus.remote_write "default" {
 	endpoint {
 		url = sys.env("PROMETHEUS_URL") + "/api/v1/write"
