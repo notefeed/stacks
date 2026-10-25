@@ -1,6 +1,6 @@
 # Alloy collects everything notefeed-1 reports
 
-2026-10-25 · small change · approved: _pending_
+2026-10-25 · small change · approved 2026-10-25
 
 ## Why
 
