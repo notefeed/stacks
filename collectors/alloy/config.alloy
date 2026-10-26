@@ -39,7 +39,7 @@ prometheus.exporter.unix "host" {
 	procfs_path    = "/host/proc"
 	sysfs_path     = "/host/sys"
 	rootfs_path    = "/host/root"
-	set_collectors = ["cpu", "meminfo", "filesystem", "loadavg", "diskstats", "netdev", "systemd"]
+	set_collectors = ["cpu", "meminfo", "vmstat", "filesystem", "loadavg", "diskstats", "netdev", "systemd"]
 
 	netdev {
 		// The host's own interfaces: the containers' virtual ones and the bridges count the same bytes again.
