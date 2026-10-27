@@ -4,3 +4,7 @@ updates:
     directories: ["/notefeed", "/caddy", "/collectors", "/gesetze-fuer-ki"]
     schedule:
       interval: weekly
+    ignore:
+      # A Postgres major can't open the previous major's data directory: it needs a dump and restore, done by hand.
+      - dependency-name: postgres
+        update-types: [version-update:semver-major]
