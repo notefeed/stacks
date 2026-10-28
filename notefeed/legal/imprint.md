@@ -11,7 +11,7 @@ The full legal notice with the postal address is the one for all my sites, in Ge
 
 Email: [hello@notefeed.me](mailto:hello@notefeed.me)\
 Support, licenses and refunds: [support@notefeed.me](mailto:support@notefeed.me)\
-Illegal content: the **Report** link on every note, or [abuse@notefeed.me](mailto:abuse@notefeed.me)\
+Illegal content: the **Report** link on every published note, or [abuse@notefeed.me](mailto:abuse@notefeed.me)\
 Security issues: [security@notefeed.me](mailto:security@notefeed.me)
 
 ## Value added tax

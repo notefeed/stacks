@@ -1,6 +1,6 @@
 # Terms
 
-Last updated: 14 October 2026. These are the terms of the hosted service at notefeed.me, run by Marcel Bruckner, Germany ([legal notice](/imprint)). The software itself is open source and free to run yourself; these terms are about the hosted service only.
+Last updated: 28 October 2026. These are the terms of the hosted service at notefeed.me, run by Marcel Bruckner, Germany ([legal notice](/imprint)). The software itself is open source and free to run yourself; these terms are about the hosted service only.
 
 ## The service
 
@@ -29,7 +29,7 @@ Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor ei
 
 ## What you may not post
 
-Anything illegal. Every note has a **Report** link. A feed that is reported for illegal content may be removed at once, with its pictures, and its pictures may be blocked from being posted again; a license on a removed feed stays with its owner and can be used on another feed. We may do this without asking you first.
+Anything illegal. Every published note has a **Report** link. A feed that is reported for illegal content may be removed at once, with its pictures, and its pictures may be blocked from being posted again; a license on a removed feed stays with its owner and can be used on another feed. We may do this without asking you first.
 
 ## No promise of availability
 
