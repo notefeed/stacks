@@ -3,7 +3,7 @@
 # agent answers the hub's questions about the machine. Both talk over the private network only.
 services:
   alloy:
-    image: grafana/alloy:v1.20.1
+    image: grafana/alloy:v1.21.2
     container_name: alloy
     restart: unless-stopped
     # The host's network, so the collector `netdev` counts the server's interfaces and not the container's own (/proc/net is
