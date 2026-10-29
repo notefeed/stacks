@@ -36,7 +36,7 @@ services:
 
   # Started only with the profile `beszel`, once the hub's key is known (the hub shows it when the server is added).
   beszel-agent:
-    image: henrygd/beszel-agent:0.21.0
+    image: henrygd/beszel-agent:0.21.1
     container_name: beszel-agent
     restart: unless-stopped
     profiles: ["beszel"]
