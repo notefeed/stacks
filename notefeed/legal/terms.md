@@ -29,7 +29,7 @@ Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor ei
 
 ## What you may not post
 
-Anything illegal. Every published note has a **Report** link. A feed that is reported for illegal content may be removed at once, with its pictures, and its pictures may be blocked from being posted again; a license on a removed feed stays with its owner and can be used on another feed. We may do this without asking you first.
+Anything illegal. Every published note has a **Report** link. A feed that is reported for illegal content may be removed at once, with its pictures, and its pictures may be blocked from being posted again; a license on a removed feed stays with its owner and can be used on another feed. A single note, with what was posted with it, may be removed instead, and a mark says in its place that the operator removed it. We may do this without asking you first.
 
 ## No promise of availability
 
