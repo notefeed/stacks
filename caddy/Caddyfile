@@ -43,7 +43,7 @@ www.{$SITE_HOST} {
 	reverse_proxy {$UPSTREAM}
 }
 
-# gesetze-fuer-ki.de (../gesetze-fuer-ki): the documentation at /, the MCP endpoint at /mcp, both from one container.
+# gesetze-fuer-ki.de (its compose file is in Gesetze-fuer-KI/stacks, checked out next to this repository): the documentation at /, the MCP endpoint at /mcp, both from one container.
 # Its other names (www., gesetze-für-ki.de, the .online pair; the list is GESETZE_REDIRECTS) all lead to the one name.
 # 308 keeps the method, so an MCP client that POSTs to an old name still reaches /mcp.
 {$GESETZE_REDIRECTS} {
