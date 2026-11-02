@@ -18,6 +18,8 @@ services:
       LOKI_URL: ${LOKI_URL:?where Loki listens, e.g. http://10.0.0.2:3100}
       PROMETHEUS_URL: ${PROMETHEUS_URL:?where Prometheus listens, e.g. http://10.0.0.2:9090}
       PRODUCT: ${PRODUCT:?the product this server belongs to}
+      # The compose projects whose containers' logs carry their own product, separated by |; empty: none.
+      PRODUCT_PROJECTS: ${PRODUCT_PROJECTS:-}
       HOST_NAME: ${HOST_NAME:?this server's name}
       PRIVATE_IP: ${PRIVATE_IP:?this server's address on the private network}
       NOTEFEED_METRICS_TOKEN: ${NOTEFEED_METRICS_TOKEN:?the token of notefeed's /metrics}
