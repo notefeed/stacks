@@ -1,4 +1,6 @@
-// The logs of every container on this server, to Loki, labelled with the product and the server they come from.
+// The logs of every container on this server, to Loki, labelled with the product and the server they come from. A container
+// of a product's own compose project (PRODUCT_PROJECTS: notefeed, gesetze-fuer-ki, gamepanion) carries that product; the
+// server's shared ones (Caddy, these collectors, the runner) carry the server's PRODUCT.
 // Below them, the numbers, to Prometheus: the machine's, notefeed's, Caddy's, PostgreSQL's and healthchecks'.
 discovery.docker "containers" {
 	host = "unix:///var/run/docker.sock"
@@ -12,6 +14,17 @@ discovery.relabel "containers" {
 		regex         = "/(.*)"
 		target_label  = "container"
 	}
+
+	rule {
+		target_label = "product"
+		replacement  = sys.env("PRODUCT")
+	}
+
+	rule {
+		source_labels = ["__meta_docker_container_label_com_docker_compose_project"]
+		regex         = "(" + sys.env("PRODUCT_PROJECTS") + ")"
+		target_label  = "product"
+	}
 }
 
 loki.source.docker "containers" {
@@ -20,8 +33,7 @@ loki.source.docker "containers" {
 	relabel_rules = discovery.relabel.containers.rules
 	forward_to    = [loki.write.default.receiver]
 	labels        = {
-		product = sys.env("PRODUCT"),
-		host    = sys.env("HOST_NAME"),
+		host = sys.env("HOST_NAME"),
 	}
 }
 
@@ -33,7 +45,7 @@ loki.write "default" {
 
 // The machine itself: CPU, memory, disk, load and network, read from the host's /proc and /sys (mounted under /host) by the
 // exporter built into Alloy, and sent to Prometheus on the monitoring server. Nothing listens for it on this server.
-// systemd: the state and the last start of the backup units (notefeed-dump-*, notefeed-offsite), asked over the host's D-Bus
+// systemd: the state and the last start of the backup units (notefeed-dump-*, notefeed-offsite, gamepanion-dump-*, gamepanion-offsite), asked over the host's D-Bus
 // socket, for the backup age on the operator dashboard. Only those units: their names, never what they hold.
 prometheus.exporter.unix "host" {
 	procfs_path    = "/host/proc"
@@ -47,7 +59,7 @@ prometheus.exporter.unix "host" {
 	}
 
 	systemd {
-		unit_include = "notefeed-(dump-.+|offsite)\\.(service|timer)"
+		unit_include = "(notefeed|gamepanion)-(dump-.+|offsite)\\.(service|timer)"
 		start_time   = true
 	}
 

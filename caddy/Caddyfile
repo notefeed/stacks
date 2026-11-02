@@ -70,3 +70,35 @@ www.{$SITE_HOST} {
 		flush_interval -1
 	}
 }
+
+# gamepanion.app (its compose file is in gamepanion/stacks, checked out next to this repository): the web app, the MCP
+# endpoint at /mcp and the REST API at /api/v1, all from one container. www. leads to the one name; 308 keeps the method,
+# so an MCP client that POSTs to it still reaches /mcp.
+{$GAMEPANION_REDIRECTS} {
+	redir https://{$GAMEPANION_HOST}{uri} 308
+}
+
+{$GAMEPANION_HOST} {
+	encode zstd gzip
+
+	# The same line per request as for notefeed: no client address, no query string, no body.
+	log {
+		output stdout
+		import /etc/caddy/access-log.caddy
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	# A voice message for the chat is one request.
+	request_body {
+		max_size 30MB
+	}
+
+	# The chat and MCP answer as a stream of events: pass each one on at once.
+	reverse_proxy {$GAMEPANION_UPSTREAM} {
+		flush_interval -1
+	}
+}
