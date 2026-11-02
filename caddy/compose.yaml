@@ -24,6 +24,10 @@ services:
       kuma.gesetze-site.http.name: ${GESETZE_HOST}
       kuma.gesetze-site.http.url: https://${GESETZE_HOST}/
       kuma.gesetze-site.http.parent_name: host-group
+      # gamepanion.app as a visitor reaches it (gamepanion/stacks).
+      kuma.gamepanion-site.http.name: ${GAMEPANION_HOST}
+      kuma.gamepanion-site.http.url: https://${GAMEPANION_HOST}/health
+      kuma.gamepanion-site.http.parent_name: host-group
     restart: unless-stopped
     network_mode: host
     env_file: .env
