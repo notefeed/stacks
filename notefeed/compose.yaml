@@ -1,14 +1,15 @@
 # notefeed with its database and its image store. Nothing here is published to the internet: notefeed listens on the
-# server's private address, where Caddy (../caddy) passes requests on and the monitoring server scrapes /metrics.
+# server's private address, where the Caddy on the business's shared server (gewerbe-1) passes requests on and the
+# collectors (../collectors) fetch /metrics.
 services:
   notefeed:
     image: ghcr.io/notefeed/notefeed:0.34.0
     container_name: notefeed
-    # Monitored by Uptime Kuma on the monitoring server (see ../collectors: AutoKuma reads these labels): notefeed itself,
-    # over the private network, so an alert tells this apart from Caddy or DNS failing.
+    # Monitored by Uptime Kuma on the monitoring server (see ../collectors: AutoKuma reads these labels): notefeed as a
+    # visitor reaches it, at its public address (PUBLIC_URL in .env), through DNS and the Caddy on gewerbe-1.
     labels:
-      kuma.notefeed.http.name: notefeed (direct)
-      kuma.notefeed.http.url: http://${PRIVATE_IP}:3000/
+      kuma.notefeed.http.name: notefeed
+      kuma.notefeed.http.url: ${PUBLIC_URL}/
       kuma.notefeed.http.parent_name: host-group
     restart: unless-stopped
     env_file: .env
@@ -19,7 +20,7 @@ services:
       NOTEFEED_S3_ENDPOINT: http://s3:7070
       NOTEFEED_S3_BUCKET: ${NOTEFEED_S3_BUCKET:-notefeed-images}
       NOTEFEED_S3_REGION: us-east-1
-      # Behind Caddy, which says who the client is.
+      # Behind Caddy on gewerbe-1, which says who the client is.
       NOTEFEED_TRUST_PROXY: "1"
       # This instance's own imprint and privacy page (./legal); notefeed ships neither.
       NOTEFEED_IMPRINT_FILE: /legal/imprint.md

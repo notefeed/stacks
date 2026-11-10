@@ -1,7 +1,8 @@
 // The logs of every container on this server, to Loki, labelled with the product and the server they come from. A container
 // of a product's own compose project (PRODUCT_PROJECTS: notefeed, gesetze-fuer-ki, gamepanion) carries that product; the
-// server's shared ones (Caddy, these collectors, the runner) carry the server's PRODUCT.
-// Below them, the numbers, to Prometheus: the machine's, notefeed's, Caddy's, PostgreSQL's and healthchecks'.
+// server's shared ones (these collectors, the runner) carry the server's PRODUCT.
+// Below them, the numbers, to Prometheus: the machine's, notefeed's, PostgreSQL's and healthchecks'. Caddy's are counted
+// on gewerbe-1, where Caddy runs since 2026-11.
 discovery.docker "containers" {
 	host = "unix:///var/run/docker.sock"
 }
@@ -112,36 +113,6 @@ prometheus.scrape "healthchecks" {
 	job_name        = "healthchecks"
 	scrape_interval = "60s"
 	forward_to      = [prometheus.relabel.host.receiver]
-}
-
-// Caddy's counts per host name (../caddy, the global option `metrics`), from its admin endpoint on this host. Caddy calls
-// the host name `host`, which here is the server's name, so it becomes `site`. Only the totals are kept, not the
-// histograms' buckets nor Go's own numbers: a year of them stays small. Where there is no Caddy, the target is down.
-prometheus.scrape "caddy" {
-	targets         = [{"__address__" = "127.0.0.1:2019"}]
-	job_name        = "caddy"
-	scrape_interval = "60s"
-	forward_to      = [prometheus.relabel.caddy.receiver]
-}
-
-prometheus.relabel "caddy" {
-	forward_to = [prometheus.relabel.host.receiver]
-
-	rule {
-		source_labels = ["__name__"]
-		regex         = "caddy_http_(requests_total|request_duration_seconds_(count|sum)|request_size_bytes_(count|sum)|response_size_bytes_(count|sum))|up"
-		action        = "keep"
-	}
-
-	rule {
-		source_labels = ["host"]
-		target_label  = "site"
-	}
-
-	rule {
-		regex  = "host"
-		action = "labeldrop"
-	}
 }
 
 // PostgreSQL's statistics from the exporter in ../compose.yaml (profile `postgres`): the server-wide ones, notefeed's

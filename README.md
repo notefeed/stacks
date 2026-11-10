@@ -1,14 +1,19 @@
 # stacks
 
-How [notefeed.me](https://notefeed.me) runs [notefeed](https://github.com/notefeed/notefeed): the compose files of the server, one folder per tool. It is public as a worked example of a production setup with PostgreSQL, an S3-compatible image store and Caddy in front; take what is useful.
+How [notefeed.me](https://notefeed.me) runs [notefeed](https://github.com/notefeed/notefeed): the compose files of the server, one folder per tool. It is public as a worked example of a production setup with PostgreSQL and an S3-compatible image store; take what is useful.
 
 | Folder | What runs | Reachable |
 |---|---|---|
-| `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint, privacy page, terms and the license page's words (`license.md`), `scripts/dump.sh` dumps the database and `scripts/copy-images.sh` copies the image files | On the server's private address only: Caddy passes requests on, and the monitoring server scrapes `/metrics` |
-| `caddy/` | Caddy: certificates from Let's Encrypt and the front door, also for [gesetze-fuer-ki.de](https://gesetze-fuer-ki.de) and [gamepanion.app](https://gamepanion.app), whose compose files are in [Gesetze-fuer-KI/stacks](https://github.com/Gesetze-fuer-KI/stacks) and [gamepanion/stacks](https://github.com/gamepanion/stacks) | Public, ports 80 and 443 |
-| `collectors/` | Alloy (container logs to Loki; the machine's, notefeed's, Caddy's, PostgreSQL's and healthchecks' numbers to Prometheus, which fetches nothing from this server itself), the Beszel agent, AutoKuma, which turns the `kuma.*` labels in these files into monitors in Uptime Kuma, and the PostgreSQL exporter (profile `postgres`, once its login has a password) | Not from outside |
+| `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint, privacy page, terms and the license page's words (`license.md`), `scripts/dump.sh` dumps the database and `scripts/copy-images.sh` copies the image files | On the server's private address only: the business's Caddy on its other server passes requests on |
+| `collectors/` | Alloy (container logs to Loki; the machine's, notefeed's, PostgreSQL's and healthchecks' numbers to Prometheus, which fetches nothing from this server itself), the Beszel agent, AutoKuma, which turns the `kuma.*` labels in these files into monitors in Uptime Kuma, and the PostgreSQL exporter (profile `postgres`, once its login has a password) | Not from outside |
 
 Until 2026-11-01 gesetze-fuer-ki.de had its folder here too; it moved, with its history, to Gesetze-fuer-KI/stacks.
+
+Until 2026-11 `caddy/` was here too: the front door with the certificates, for this server's three sites (notefeed.me,
+[gesetze-fuer-ki.de](https://gesetze-fuer-ki.de), [gamepanion.app](https://gamepanion.app)). Since then the one Caddy of the
+business, on its other server, serves every public name and passes notefeed.me's requests on over the private network; this
+server has no public port but SSH. Its routes, with the same limits and the same access log (no addresses, no feed names),
+are in the business's private stacks repository.
 
 ## How it is used
 
@@ -30,10 +35,22 @@ A deleted feed is gone from the last backup after 31 days: 30 days of daily dump
 
 ```sh
 cp notefeed/.env.example notefeed/.env   # fill in the secrets; PRIVATE_IP=127.0.0.1 on a single machine
-cp caddy/.env.example caddy/.env         # your host name and address; UPSTREAM=127.0.0.1:3000 to match
 mkdir -p notefeed/data/s3/notefeed-images
 (cd notefeed && docker compose up -d)
-(cd caddy && docker compose up -d)
+```
+
+Put a reverse proxy with TLS in front of `127.0.0.1:3000`. With Caddy, the essentials of notefeed.me's:
+
+```caddyfile
+notes.example.com {
+	encode zstd gzip
+	# A note with its pictures is one request: the text and up to ten images of at most 10 MiB each.
+	request_body {
+		max_size 120MB
+	}
+	# Caddy writes X-Forwarded-For itself, which notefeed reads with NOTEFEED_TRUST_PROXY=1.
+	reverse_proxy 127.0.0.1:3000
+}
 ```
 
 `collectors/` is only useful with a Loki, a Beszel hub and an Uptime Kuma to send to. The settings are explained in notefeed's [documentation](https://docs.notefeed.me/self-hosting/configuration/).
