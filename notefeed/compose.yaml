@@ -5,11 +5,12 @@ services:
   notefeed:
     image: ghcr.io/notefeed/notefeed:0.34.0
     container_name: notefeed
-    # Monitored by Uptime Kuma on the monitoring server (see ../collectors: AutoKuma reads these labels): notefeed as a
-    # visitor reaches it, at its public address (PUBLIC_URL in .env), through DNS and the Caddy on gewerbe-1.
+    # Monitored by Uptime Kuma on the monitoring server (see ../collectors: AutoKuma reads these labels): notefeed itself,
+    # over the private network from the monitoring server, so an alert tells this apart from Caddy or DNS failing. The public
+    # name is checked at Caddy.
     labels:
-      kuma.notefeed.http.name: notefeed
-      kuma.notefeed.http.url: ${PUBLIC_URL}/
+      kuma.notefeed.http.name: notefeed (direct)
+      kuma.notefeed.http.url: http://${PRIVATE_IP}:3000/
       kuma.notefeed.http.parent_name: host-group
     restart: unless-stopped
     env_file: .env
