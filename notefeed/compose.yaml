@@ -3,7 +3,7 @@
 # collectors (../collectors) fetch /metrics.
 services:
   notefeed:
-    image: ghcr.io/notefeed/notefeed:0.35.0
+    image: ghcr.io/notefeed/notefeed:0.36.0
     container_name: notefeed
     # Monitored by Uptime Kuma on the monitoring server (see ../collectors: AutoKuma reads these labels): notefeed itself,
     # over the private network from the monitoring server, so an alert tells this apart from Caddy or DNS failing. The public
