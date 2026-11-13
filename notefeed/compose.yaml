@@ -13,37 +13,11 @@ services:
       kuma.notefeed.http.url: http://${PRIVATE_IP}:3000/
       kuma.notefeed.http.parent_name: host-group
     restart: unless-stopped
+    # Every setting with a value of its own is in .env (written by the Ansible repository; .env.example lists them with what
+    # each is for). Only the two built from other variables stay here.
     env_file: .env
     environment:
-      NOTEFEED_STORAGE: postgres
       NOTEFEED_DATABASE_URL: postgres://notefeed:${POSTGRES_PASSWORD:?the database password}@db:5432/notefeed
-      NOTEFEED_IMAGES: s3
-      NOTEFEED_S3_ENDPOINT: http://s3:7070
-      NOTEFEED_S3_BUCKET: ${NOTEFEED_S3_BUCKET:-notefeed-images}
-      NOTEFEED_S3_REGION: us-east-1
-      # Behind Caddy on gewerbe-1, which says who the client is.
-      NOTEFEED_TRUST_PROXY: "1"
-      # This instance's own imprint and privacy page (./legal); notefeed ships neither.
-      NOTEFEED_IMPRINT_FILE: /legal/imprint.md
-      NOTEFEED_PRIVACY_FILE: /legal/privacy.md
-      # The terms page, the footer's "Terms" (newer than notefeed 0.11; an older notefeed ignores it).
-      NOTEFEED_TERMS_FILE: /legal/terms.md
-      # The license page's words (notefeed/notefeed #218, ADR 0035; from notefeed 0.20 on): the intro, the free tile and what
-      # every plan tile shows. The plans' names, descriptions and prices are the Creem products'. With a payment provider set,
-      # notefeed does not serve without this file.
-      NOTEFEED_LICENSE_FILE: /legal/license.md
-      # The footer's "Support" link (from notefeed 0.20 on).
-      NOTEFEED_SUPPORT_EMAIL: support@notefeed.me
-      # The licenses are a SQLite file of their own, next to the database but not in it (notefeed/notefeed #42).
-      NOTEFEED_LICENSE_DB: /licenses/licenses.db
-      # No pictures from anonymous feeds until they are a paid feature (notefeed/notefeed #152), and the "Report" link on every
-      # note, to the form in ../nocodb (#154). Both from notefeed 0.10 on; an older notefeed ignores them.
-      NOTEFEED_IMAGE_UPLOADS: ${NOTEFEED_IMAGE_UPLOADS:-}
-      NOTEFEED_REPORT_URL: ${NOTEFEED_REPORT_URL:-}
-      # Encryption at rest with the main key in OpenBao on the monitoring server (notefeed/notefeed #212, #215; from notefeed
-      # 0.19 on): notefeed holds no key, only its AppRole (NOTEFEED_OPENBAO_ROLE_ID and _SECRET_ID in .env). While OpenBao
-      # does not answer, notefeed.me shows its maintenance page.
-      NOTEFEED_KMS: openbao
       NOTEFEED_OPENBAO_ADDR: http://${OPENBAO_IP:?the monitoring server's private address, where OpenBao listens}:8200
     volumes:
       - ./legal:/legal:ro
