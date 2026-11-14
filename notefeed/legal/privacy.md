@@ -1,6 +1,6 @@
 # Data privacy
 
-This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 28 October 2026.
+This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 14 November 2026.
 
 ## Controller (Verantwortlicher)
 
@@ -23,7 +23,7 @@ The domain notefeed.me is registered with Cloudflare, Inc. (USA), which also ans
 **Backups:** so that a failure does not lose your notes, copies are made of what is stored:
 
 - every hour a copy of the database (feeds, notes and their metadata, without the images), kept on the same server for 1 day;
-- every day a copy of the database and a copy of the images, kept on the same server for 30 days; the licenses are in the copies of the database;
+- every day a copy of the database and a copy of the images, kept on the same server for 30 days; the accounts and licenses are copied with them;
 - every day a backup of the whole server, made and kept by Hetzner for 7 days.
 - every day the newest daily copy of the database and of the images, encrypted on the server before it leaves it, to a storage space at Hetzner that is separate from the server (Hetzner Storage Box, Germany), kept up to 30 days.
 
@@ -31,15 +31,23 @@ A backup is not changed after it is made, so a feed or note you delete is still 
 
 **Careful with images:** metadata such as the GPS position is left in uploaded images. Anyone who can read the feed can see it. Remove it before uploading if you do not want to share it.
 
-Feeds have no accounts. Anyone who knows a feed's name can read and post to it, and anyone with its read link can read it, images included. Do not post personal data of other people without a reason to.
+Posting needs no account. Anyone who knows a feed's name can read and post to it, unless it has a feed password, and anyone with its read link can read it, images included. Do not post personal data of other people without a reason to.
+
+## Accounts
+
+**What:** an account is optional. It is a number generated for you, a one-way fingerprint (hash) of its recovery key, the public keys of the passkeys you add (with the name you give each and the kind of passkey store, such as iCloud Keychain, never your device), your sign-ins (without your IP address or browser), the fingerprints of the account tokens you make, and which feeds the account owns. It holds no e-mail address and no name: nothing that tells who you are. A note you post signed in carries no account; it shows the name you set for your feed, if any.
+
+**Why and legal basis:** to let you manage your feeds and your license on every device (Art. 6 (1) (b) GDPR).
+
+**Retention:** until you delete the account, which deletes its feeds too. A sign-in ends after 30 days unused and 90 days after it was made. An account without a feed and without a license is deleted 30 days after it was made. It is part of the backups described above.
 
 ## Licenses and payment
 
-**What:** a license for a feed is paid for through Creem (creem.io), which is the seller of record and collects your payment and contact data (name, e-mail address, country, payment details) itself, under its own privacy policy. I receive from Creem only what the license needs: that a subscription exists, whether it is paid and until when. After payment a license key is shown to you; notefeed stores only a one-way fingerprint (hash) of it, the subscription's reference at Creem, its status and the feed it is entered on. I do not learn who you are from this, and a lost key cannot be recovered.
+**What:** a license is paid for through Creem (creem.io), which is the seller of record and collects your payment and contact data (name, e-mail address, country, payment details) itself, under its own privacy policy. I receive from Creem only what the license needs: that a subscription exists for your account, how many feeds it covers, whether it is paid and until when, and Creem's references to it and to you as its customer (so your account page can open Creem's portal for you). notefeed stores these with your account, and with each feed whether it is under the license. I do not learn who you are from this.
 
 **Why and legal basis:** to provide the license you bought (Art. 6 (1) (b) GDPR) and to keep the records the law requires, which Creem keeps as the seller.
 
-**Retention:** the license record stays as long as the license exists, so that a lapsed license can be renewed or entered again. On request I delete it. It is part of the backups described above.
+**Retention:** the subscription record stays with your account, so that a lapsed license can be renewed; deleting the account deletes it. On request I delete it. It is part of the backups described above.
 
 **Recipients:** Creem, which processes your payment as its own controller and as a merchant of record. Please read its privacy policy on creem.io too.
 

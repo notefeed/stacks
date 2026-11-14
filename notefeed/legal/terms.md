@@ -1,6 +1,6 @@
 # Terms
 
-Last updated: 28 October 2026. These are the terms of the hosted service at notefeed.me, run by Marcel Bruckner, Germany ([legal notice](/imprint)). The software itself is open source and free to run yourself; these terms are about the hosted service only.
+Last updated: 14 November 2026. These are the terms of the hosted service at notefeed.me, run by Marcel Bruckner, Germany ([legal notice](/imprint)). The software itself is open source and free to run yourself; these terms are about the hosted service only.
 
 ## The service
 
@@ -8,14 +8,17 @@ notefeed.me lets anyone post short notes and pictures to a named feed, by script
 
 **Free:** each feed keeps its newest 100 notes (the oldest is removed when a new one is posted), with no pictures and no feed password.
 
-**With a license** (per feed): no limit on stored notes, pictures, and a feed password for that feed. Readers never pay.
+**With a license** (per feed it covers): no limit on stored notes, pictures, and feed passwords for each feed under it. Readers never pay.
+
+**Accounts:** an account is optional and needed only to buy a license. It is a number with a recovery key and, if you add them, passkeys; it holds no e-mail address and no name. Keep the number and the key: if you lose them and every passkey, the account can't be recovered, and with it the license on it. An account without a feed and without a license is deleted 30 days after it was made.
 
 ## Paying for a license
 
-- **Price:** EUR 1.99 per month or EUR 19.90 per year per feed, VAT included, a subscription that renews every month or every year until cancelled. The price shown at checkout is the price you pay.
+- **Price:** EUR 1.99 per month or EUR 19.90 per year per feed, VAT included, for as many feeds as you choose, a subscription that renews every month or every year until cancelled. The price shown at checkout is the price you pay.
 - **Seller:** payment, invoicing, VAT and the customer portal are handled by Creem (creem.io), which is the seller of record. Your payment data is given to Creem, not to notefeed.
-- **Delivery:** after payment a license key is shown on the page you are sent back to. Enter it in the feed's settings. The key belongs to one feed at a time and can be moved to another feed. The key is also in Creem's receipt e-mail and in Creem's customer portal, where you can find it again if you lose it. notefeed stores no information about you, only a one-way fingerprint of the key, so notefeed itself cannot show it again.
-- **Cancelling:** at any time, in Creem's customer portal: sign in at [creem.io/my-orders/login](https://creem.io/my-orders/login) with the e-mail address you bought with, or use the link in Creem's receipt. The license stays until the end of the period you paid for. Then the feed goes back to the free tier. Nothing is deleted: pictures already stored are still shown, and a feed password stays in force, but you cannot add pictures or change the password until the feed has a license again.
+- **Delivery:** you buy while signed in to your account; once Creem confirms the payment, the license is on that account, and you put your feeds under it on the account page or in each feed's settings.
+- **More or fewer feeds:** on your account page. Raising the number is charged at once for the rest of the period; lowering it takes effect without a refund, and not below the feeds under the license.
+- **Cancelling:** at any time, in Creem's customer portal, which your account page opens. The license stays until the end of the period you paid for. Then its feeds go back to the free tier. Nothing is deleted: pictures already stored are still shown, and feed passwords stay in force, but you cannot add pictures or passwords until a feed is under a license again. Deleting your account cancels its subscriptions.
 
 ## Refunds
 
