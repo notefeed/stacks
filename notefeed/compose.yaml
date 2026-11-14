@@ -21,7 +21,7 @@ services:
       NOTEFEED_OPENBAO_ADDR: http://${OPENBAO_IP:?the monitoring server's private address, where OpenBao listens}:8200
     volumes:
       - ./legal:/legal:ro
-      - ./data/licenses:/licenses
+      - ./data/accounts:/accounts
     ports:
       - "${PRIVATE_IP:?this server's address on the private network}:3000:3000"
     depends_on:
