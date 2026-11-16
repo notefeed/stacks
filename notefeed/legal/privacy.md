@@ -1,6 +1,6 @@
 # Data privacy
 
-This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 14 November 2026.
+This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 16 November 2026.
 
 ## Controller (Verantwortlicher)
 
@@ -35,7 +35,7 @@ Posting needs no account. Anyone who knows a feed's name can read and post to it
 
 ## Accounts
 
-**What:** an account is optional. It is a number generated for you, a one-way fingerprint (hash) of its recovery key, the public keys of the passkeys you add (with the name you give each and the kind of passkey store, such as iCloud Keychain, never your device), your sign-ins (without your IP address or browser), the fingerprints of the account tokens you make, and which feeds the account owns. It holds no e-mail address and no name: nothing that tells who you are. A note you post signed in carries no account; it shows the name you set for your feed, if any.
+**What:** an account is optional. It is a number generated for you, a one-way fingerprint (hash) of its recovery key, the public keys of the passkeys you add (with the name you give each and the kind of passkey store, such as iCloud Keychain, never your device), your sign-ins (without your IP address or browser), the fingerprints of the account tokens you make, the AI assistants and other MCP clients you allow to act as the account (the name and return address each client registered, and the tokens it was given), and which feeds the account owns. It holds no e-mail address and no name: nothing that tells who you are. A note you post signed in carries no account; it shows the name you set for your feed, if any.
 
 **Why and legal basis:** to let you manage your feeds and your license on every device (Art. 6 (1) (b) GDPR).
 
