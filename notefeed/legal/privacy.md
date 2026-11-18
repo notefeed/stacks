@@ -1,6 +1,6 @@
 # Data privacy
 
-This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 16 November 2026.
+This explains which personal data this notefeed instance processes and why, as required by the GDPR (DSGVO). Last updated: 18 November 2026.
 
 ## Controller (Verantwortlicher)
 
@@ -29,7 +29,7 @@ The domain notefeed.me is registered with Cloudflare, Inc. (USA), which also ans
 
 A backup is not changed after it is made, so a feed or note you delete is still in the backups made before. It is gone from the last of them after 31 days at most: 30 days of daily copies, the last of which was made up to a day after you deleted; the copy at the Storage Box is removed on the same schedule. Backups are stored in Germany, are read only to bring the service back after a failure or a mistake, and are not searched, not used for anything else, and never used to bring back a feed on request: what you delete stays deleted. The legal basis is my legitimate interest, and my duty, to keep the service and your data available (Art. 6 (1) (f), Art. 32 GDPR).
 
-**Careful with images:** metadata such as the GPS position is left in uploaded images. Anyone who can read the feed can see it. Remove it before uploading if you do not want to share it.
+**Images:** before an uploaded image is stored, the server removes its metadata (EXIF, GPS position, XMP, comments), whichever app or script posts it. What the picture itself shows stays visible to anyone who can read the feed.
 
 Posting needs no account. Anyone who knows a feed's name can read and post to it, unless it has a feed password, and anyone with its read link can read it, images included. Do not post personal data of other people without a reason to.
 
