@@ -46,7 +46,7 @@ loki.write "default" {
 
 // The machine itself: CPU, memory, disk, load and network, read from the host's /proc and /sys (mounted under /host) by the
 // exporter built into Alloy, and sent to Prometheus on the monitoring server. Nothing listens for it on this server.
-// systemd: the state and the last start of the backup units (notefeed-dump-*, notefeed-offsite, gamepanion-dump-*, gamepanion-offsite), asked over the host's D-Bus
+// systemd: the state and the last start of the backup units (notefeed-dump-*, notefeed-offsite, gamepanion-dump-*, gamepanion-offsite, upload-dump-*), asked over the host's D-Bus
 // socket, for the backup age on the operator dashboard. Only those units: their names, never what they hold.
 prometheus.exporter.unix "host" {
 	procfs_path    = "/host/proc"
@@ -60,7 +60,7 @@ prometheus.exporter.unix "host" {
 	}
 
 	systemd {
-		unit_include = "(notefeed|gamepanion)-(dump-.+|offsite)\\.(service|timer)"
+		unit_include = "(notefeed|gamepanion|upload)-(dump-.+|offsite)\\.(service|timer)"
 		start_time   = true
 	}
 
