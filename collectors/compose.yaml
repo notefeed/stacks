@@ -1,44 +1,9 @@
-# The collecting side, the same on every server that is monitored: Alloy ships the containers' logs to Loki and the
-# machine's CPU, memory, disk, network and backup units to Prometheus, the Beszel
+# The collecting side, the same on every server that is monitored: Fluent Bit ships the containers' logs to VictoriaLogs and
+# the machine's CPU, memory, disk, network and backup units to VictoriaMetrics, the Beszel
 # agent answers the hub's questions about the machine. Both talk over the private network only.
 services:
-  alloy:
-    image: grafana/alloy:v1.20.1
-    container_name: alloy
-    restart: unless-stopped
-    # The host's network, so the collector `netdev` counts the server's interfaces and not the container's own (/proc/net is
-    # the reading process's). Alloy's own HTTP server stays on 127.0.0.1:12345.
-    network_mode: host
-    command:
-      - run
-      - /etc/alloy/config.alloy
-      - --storage.path=/var/lib/alloy/data
-      - --disable-reporting
-    environment:
-      LOKI_URL: ${LOKI_URL:?where Loki listens, e.g. http://10.0.0.2:3100}
-      PROMETHEUS_URL: ${PROMETHEUS_URL:?where Prometheus listens, e.g. http://10.0.0.2:9090}
-      PRODUCT: ${PRODUCT:?the product this server belongs to}
-      # The compose projects whose containers' logs carry their own product, separated by |; empty: none.
-      PRODUCT_PROJECTS: ${PRODUCT_PROJECTS:-}
-      HOST_NAME: ${HOST_NAME:?this server's name}
-      PRIVATE_IP: ${PRIVATE_IP:?this server's address on the private network}
-      NOTEFEED_METRICS_TOKEN: ${NOTEFEED_METRICS_TOKEN:?the token of notefeed's /metrics}
-      # JSON: [] while healthchecks is not set up (Ansible writes it).
-      HEALTHCHECKS_TARGETS: ${HEALTHCHECKS_TARGETS:-[]}
-    volumes:
-      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      # The host as it is, read-only, for the machine's numbers.
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/host/root:ro,rslave
-      # The host's systemd, read-only, for the backup units' state (config.alloy, the collector `systemd`).
-      - /run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro
-      - alloy:/var/lib/alloy/data
-
-  # Started only with the profile `beszel`, once the hub's key is known (the hub shows it when the server is added).
-  # Container logs to VictoriaLogs and the server's numbers to VictoriaMetrics on the monitoring server (./fluent-bit), taking over
-  # from Alloy; both run until the switch. notefeed's /metrics, PostgreSQL and healthchecks VictoriaMetrics scrapes itself over the private
+  # Container logs to VictoriaLogs and the server's numbers to VictoriaMetrics on the monitoring server (./fluent-bit; in place
+  # of Alloy since 2026-11). notefeed's /metrics, PostgreSQL and healthchecks VictoriaMetrics scrapes itself over the private
   # network.
   fluent-bit:
     image: cr.fluentbit.io/fluent/fluent-bit:4.0.3
@@ -84,7 +49,7 @@ services:
 
   # PostgreSQL in depth for the operator dashboard (notefeed/ansible#21): cache hits, locks, vacuum, long transactions. Started
   # only with the profile `postgres`, once the login `monitor` (pg_monitor: reads statistics, no data) has its password. On
-  # notefeed's network, where the database is; its numbers on 127.0.0.1:9187 for Alloy. Only on the notefeed server.
+  # notefeed's network, where the database is; its numbers on the private address :9187, for VictoriaMetrics on the monitoring server. Only on the notefeed server.
   postgres-exporter:
     image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
     container_name: postgres-exporter
@@ -100,8 +65,7 @@ services:
       - --collector.stat_user_tables
       - --no-collector.settings
     ports:
-      - "127.0.0.1:9187:9187"
-      # VictoriaMetrics on the monitoring server scrapes it over the private network (Alloy above still reads 127.0.0.1).
+      # VictoriaMetrics on the monitoring server scrapes it over the private network.
       - "${PRIVATE_IP}:9187:9187"
     networks:
       - notefeed
@@ -143,7 +107,6 @@ services:
       kuma.ntfy.notification.config: '{"type":"ntfy","ntfyserverurl":"https://ntfy.sh","ntfytopic":"${NTFY_TOPIC:-}","ntfyPriority":5,"ntfyAuthenticationMethod":"none","applyExisting":false}'
 
 volumes:
-  alloy:
   autokuma:
 
 # notefeed's own network (../notefeed), for the exporter to reach the database.
