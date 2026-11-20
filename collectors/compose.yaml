@@ -68,7 +68,7 @@ services:
       # systemd over the host's D-Bus; at /run, where the collector looks (not /var/run).
       - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket:ro
   beszel-agent:
-    image: henrygd/beszel-agent:0.21.0
+    image: henrygd/beszel-agent:0.21.2
     container_name: beszel-agent
     restart: unless-stopped
     profiles: ["beszel"]
