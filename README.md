@@ -5,7 +5,7 @@ How [notefeed.me](https://notefeed.me) runs [notefeed](https://github.com/notefe
 | Folder | What runs | Reachable |
 |---|---|---|
 | `notefeed/` | notefeed, PostgreSQL 17 and Versity Gateway (the image store); `legal/` holds this instance's imprint, privacy page, terms and the license page's words (`license.md`), `scripts/dump.sh` dumps the database and `scripts/copy-images.sh` copies the image files | On the server's private address only: the business's Caddy on its other server passes requests on |
-| `collectors/` | Fluent Bit (container logs to VictoriaLogs, the machine's numbers and backup units to VictoriaMetrics, which scrapes notefeed, PostgreSQL and healthchecks itself over the private network), the Beszel agent, AutoKuma, which turns the `kuma.*` labels in these files into monitors in Uptime Kuma, and the PostgreSQL exporter (profile `postgres`, once its login has a password) | Not from outside |
+| `collectors/` | Fluent Bit (container logs to VictoriaLogs, the machine's numbers and backup units to VictoriaMetrics, which scrapes notefeed, PostgreSQL and healthchecks itself over the private network), the Beszel agent and the PostgreSQL exporter (profile `postgres`, once its login has a password) | Not from outside |
 
 Until 2026-11-01 gesetze-fuer-ki.de had its folder here too; it moved, with its history, to Gesetze-fuer-KI/stacks.
 
@@ -53,4 +53,4 @@ notes.example.com {
 }
 ```
 
-`collectors/` is only useful with a VictoriaLogs and VictoriaMetrics, a Beszel hub and an Uptime Kuma to send to. The settings are explained in notefeed's [documentation](https://docs.notefeed.me/self-hosting/configuration/).
+`collectors/` is only useful with a VictoriaLogs and VictoriaMetrics, and a Beszel hub to send to. The settings are explained in notefeed's [documentation](https://docs.notefeed.me/self-hosting/configuration/).
