@@ -1,0 +1,80 @@
+# Fluent Bit, the collector on every business server (in place of Alloy since 2026-11; the homelab did the same, its ADR-0232).
+# The same file serves products-1 (here) and gewerbe-1 (MarcelBruckner-Business/stacks' collectors): keep the two copies the
+# same; what differs comes from the environment.
+#   - Docker's container logs (json-file) to VictoriaLogs, shaped by shape.lua (host, product, container, level).
+#   - The server's own numbers (node_exporter's names: CPU, memory, disks, load, network, and on products-1 the backup units'
+#     systemd state) to VictoriaMetrics, labelled as Alloy labelled them: host, instance, product, job="integrations/unix".
+# Everything with an address of its own (Caddy, notefeed, PostgreSQL, healthchecks) VictoriaMetrics scrapes itself.
+service:
+  flush: 5
+  log_level: warn
+  http_server: on
+  http_listen: 0.0.0.0
+  http_port: 2020
+  # /api/v1/health answers 500 once the outputs keep failing.
+  health_check: on
+  hc_errors_count: 5
+  hc_retry_failure_count: 5
+  hc_period: 60
+  # Lines wait on disk while VictoriaLogs is unreachable, instead of being dropped.
+  storage.path: /state/buffer
+  storage.max_chunks_up: 32
+
+pipeline:
+  inputs:
+    - name: tail
+      tag: docker
+      path: /var/lib/docker/containers/*/*-json.log
+      path_key: filepath
+      # Joins the 16 kB pieces Docker splits a long line into.
+      multiline.parser: docker
+      db: /state/tail.db
+      # On the first start only new lines (the history comes from Loki once); a container started later is read whole.
+      read_from_head: false
+      refresh_interval: 10
+      rotate_wait: 30
+      mem_buf_limit: 16MB
+      storage.type: filesystem
+    - name: node_exporter_metrics
+      tag: metrics
+      scrape_interval: 30
+      # The host's /proc and /sys; with the host's PID namespace (compose.yaml: pid: host) the filesystem collector sees the
+      # host's mounts, not the container's (homelab#590).
+      path.procfs: /host/proc
+      path.sysfs: /host/sys
+      metrics: ${NODE_METRICS}
+      filesystem.ignore_mount_point_regex: ^/(dev|proc|sys|run|boot|var/lib/docker)($|/)
+      filesystem.ignore_filesystem_type_regex: ^(tmpfs|overlay|squashfs|proc|sysfs|devtmpfs|cgroup2?|nsfs|autofs|binfmt_misc|vfat)$
+      # Only the backup units (products-1): their names and state, never what they hold. Over the host's D-Bus socket.
+      systemd_include_pattern: ${SYSTEMD_UNITS}
+      systemd_unit_start_time_metrics: on
+
+  filters:
+    - name: lua
+      match: docker
+      script: /fluent-bit/etc/shape.lua
+      call: docker
+
+  outputs:
+    - name: http
+      match: docker
+      host: ${VICTORIA_HOST}
+      port: 9428
+      uri: /insert/jsonline?_stream_fields=host,product,container&_msg_field=_msg&_time_field=date
+      format: json_lines
+      json_date_key: date
+      json_date_format: iso8601
+      compress: gzip
+      retry_limit: no_limits
+      storage.total_limit_size: 256M
+    - name: prometheus_remote_write
+      match: metrics
+      host: ${VICTORIA_HOST}
+      port: 8428
+      uri: /api/v1/write
+      retry_limit: no_limits
+      add_label:
+        - host ${HOST_NAME}
+        - instance ${HOST_NAME}
+        - product ${PRODUCT}
+        - job integrations/unix

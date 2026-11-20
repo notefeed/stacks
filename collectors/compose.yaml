@@ -37,6 +37,36 @@ services:
       - alloy:/var/lib/alloy/data
 
   # Started only with the profile `beszel`, once the hub's key is known (the hub shows it when the server is added).
+  # Container logs to VictoriaLogs and the server's numbers to VictoriaMetrics on the monitoring server (./fluent-bit), taking over
+  # from Alloy; both run until the switch. notefeed's /metrics, PostgreSQL and healthchecks VictoriaMetrics scrapes itself over the private
+  # network.
+  fluent-bit:
+    image: cr.fluentbit.io/fluent/fluent-bit:4.0.3
+    container_name: fluent-bit
+    restart: unless-stopped
+    command: ["/fluent-bit/bin/fluent-bit", "-c", "/fluent-bit/etc/fluent-bit.yaml"]
+    # The host's process view: the filesystem collector reads the mount table of PID 1, so it reports the server's disks, not
+    # the container's (MarcelBruckner-Homelab/homelab#590).
+    pid: host
+    mem_limit: 128m
+    environment:
+      VICTORIA_HOST: ${VICTORIA_HOST:?the monitoring server's private address, where VictoriaMetrics and VictoriaLogs listen}
+      HOST_NAME: ${HOST_NAME:?this server's name}
+      PRODUCT: ${PRODUCT:?the product this server belongs to}
+      # A container of one of these Compose projects carries the project as its product.
+      PRODUCT_PROJECTS: ${PRODUCT_PROJECTS:-}
+      NODE_METRICS: cpu,meminfo,vmstat,filesystem,loadavg,diskstats,netdev,systemd
+      # The backup units, for the backup age on the dashboards and the alerts: their names and state, never what they hold.
+      SYSTEMD_UNITS: (notefeed|gamepanion|upload)-(dump-.+|offsite)\.(service|timer)
+    volumes:
+      - ./fluent-bit/fluent-bit.yaml:/fluent-bit/etc/fluent-bit.yaml:ro
+      - ./fluent-bit/shape.lua:/fluent-bit/etc/shape.lua:ro
+      - ./data/fluent-bit:/state
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      # systemd over the host's D-Bus; at /run, where the collector looks (not /var/run).
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket:ro
   beszel-agent:
     image: henrygd/beszel-agent:0.21.0
     container_name: beszel-agent
@@ -71,6 +101,8 @@ services:
       - --no-collector.settings
     ports:
       - "127.0.0.1:9187:9187"
+      # VictoriaMetrics on the monitoring server scrapes it over the private network (Alloy above still reads 127.0.0.1).
+      - "${PRIVATE_IP}:9187:9187"
     networks:
       - notefeed
 
