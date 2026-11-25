@@ -54,7 +54,7 @@ services:
   # only with the profile `postgres`, once the login `monitor` (pg_monitor: reads statistics, no data) has its password. On
   # notefeed's network, where the database is; its numbers on the private address :9187, for VictoriaMetrics on the monitoring server. Only on the notefeed server.
   postgres-exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.21.1
     container_name: postgres-exporter
     restart: unless-stopped
     profiles: ["postgres"]
